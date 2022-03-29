@@ -22,8 +22,8 @@
         try {
             const data = await createUserWithEmailAndPassword(getAuth(), email.value, password.value)
             router.push({name: 'tickers'})
-        } catch (error) {
-            console.log(error)
+        } catch (error: any) {
+            alert(error.code)
         }
     }
 
@@ -74,10 +74,12 @@
 <style scoped>
     .input-form {
         @apply appearance-none relative block w-full px-3 py-2 border border-gray-300
-        placeholder-gray-500 text-gray-900 rounded-md mb-5 focus:outline-none focus:ring-indigo-500
-        focus:border-indigo-500 focus:z-10 sm:text-sm
+        placeholder-gray-900 text-gray-900 rounded-md mb-5 focus:outline-none focus:ring-indigo-500
+        focus:border-indigo-500 focus:z-10 sm:text-sm bg-slate-200
     }
     .sign-up-button {
-        @apply relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-slate-300 bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
+        @apply relative w-full flex justify-center py-2 px-4 border border-transparent text-sm
+        font-medium rounded-md text-slate-300 bg-indigo-600 hover:bg-indigo-700 focus:outline-none
+        focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
     }
 </style>

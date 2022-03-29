@@ -16,42 +16,43 @@
 
     let min = ref(0)
     let max = ref(0)
+    const numberOfRows = 15
 
     const asks = computed(() => {
-        let quantity = getDepthSnapshot.value.asks?.slice(0, 15).map(q => q[1]).sort((a, b) => a - b)
+        let quantity = getDepthSnapshot.value.asks?.slice(0, numberOfRows).map(q => q[1]).sort((a, b) => a - b)
         if (quantity) {
             min = quantity[0];
-            max = quantity[14];
+            max = quantity[numberOfRows - 1];
         }
-        getDepthSnapshot.value.asks?.slice(0, 15).map(price => {
+        getDepthSnapshot.value.asks?.slice(0, numberOfRows).map(price => {
             price[2] = 10 + (price[1] - min) / (max - min) * 90
         })
-        return getDepthSnapshot.value.asks?.slice(0, 15).reverse()
+        return getDepthSnapshot.value.asks?.slice(0, numberOfRows).reverse()
     })
 
     const bids = computed(() => {
-        let quantity = getDepthSnapshot.value.bids?.slice(0, 15).map(q => q[1]).sort((a, b) => a - b)
+        let quantity = getDepthSnapshot.value.bids?.slice(0, numberOfRows).map(q => q[1]).sort((a, b) => a - b)
         if (quantity) {
             min = quantity[0];
-            max = quantity[14];
+            max = quantity[numberOfRows - 1];
         }
-        getDepthSnapshot.value.bids?.slice(0, 15).map(price => {
+        getDepthSnapshot.value.bids?.slice(0, numberOfRows).map(price => {
             price[2] = 10 + (price[1] - min) / (max - min) * 90
         })
-        return getDepthSnapshot.value.bids?.slice(0, 15)
+        return getDepthSnapshot.value.bids?.slice(0, numberOfRows)
     })
 
 </script>
 
 <template>
-    <div class="flex">
-        <section class="nesto-drugo">
+    <section class="flex">
+        <div class="order-book overflow-auto">
             <div class="mb-20">
                 <p
                     class="text-green-600 m-0.3 text-right"
                     v-for="ask in asks"
                     :key="ask[0]"
-                    :style="`background-image: -webkit-linear-gradient(right, rgb(0, 255, 0, 0.2), rgb(0, 255, 0, 0.2) ${ask[2]}%, transparent ${ask[2]}%)`"
+                    :style="`background-image: -webkit-linear-gradient(right, rgb(50, 205, 50, 0.2), rgb(50, 205, 50, 0.2) ${ask[2]}%, transparent ${ask[2]}%)`"
                 >
                     <span class="text-slate-300">{{ ask[0] }}</span> | {{ ask[1] }}
                 </p>
@@ -59,40 +60,24 @@
                 <hr class="my-2">
 
                 <p
-                    class="text-red-600 p-0.3 text-right"
+                    class="text-red-500 p-0.3 text-right"
                     v-for="bid in bids"
                     :key="bid[0]"
-                    :style="`background-image: -webkit-linear-gradient(right, rgb(255, 0, 0, 0.4), rgb(255, 0, 0, 0.4) ${bid[2]}%, transparent ${bid[2]}%)`"
+                    :style="`background-image: -webkit-linear-gradient(right, rgb(255, 69, 0, 0.18), rgb(255, 69, 0, 0.18) ${bid[2]}%, transparent ${bid[2]}%)`"
                 >
                     <span class="text-slate-300">{{ bid[0] }}</span> | {{ bid[1] }}
                 </p>
             </div>
-        </section>
-    </div>
+        </div>
+    </section>
 </template>
 
 <style>
-	a {
-		color: #42b983;
-	}
-
-	label {
-		margin: 0 0.5em;
-		font-weight: bold;
-	}
-
-	code {
-		background-color: #eee;
-		padding: 2px 4px;
-		border-radius: 4px;
-		color: #304455;
-	}
-
     #app {
-        height: 100vh !important
+        @apply h-screen
     }
 
-    .nesto-drugo {
-        width: 200px;
+    .order-book {
+        width: 220px;
     }
 </style>
