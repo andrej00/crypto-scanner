@@ -20,19 +20,23 @@ const router = createRouter({
 			component: () => import('../views/SignIn.vue')
 		},
 		{
-			path: '/tickers/:id',
-			name: 'ticker-chart',
-			component: () => import('../views/ChartView.vue'),
+			path: '/tickers',
+			name: 'tickers',
+			component: () => import('../views/Tickers.vue'),
 			meta: {
 				requiresAuth: true
 			}
 		},
 		{
-			path: '/tickers',
-			name: 'tickers',
-			component: () => import('../views/AboutView.vue')
+			path: '/tickers/:id',
+			name: 'ticker-chart',
+			component: () => import('../views/ChartView.vue'),
+			meta: {
+				requiresAuth: true,
+				hideNavbar: true
+			}
 		}
-	],
+	]
 });
 
 const getCurrentUser = () => {

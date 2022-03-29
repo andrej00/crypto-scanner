@@ -1,11 +1,8 @@
 <script setup lang="ts">
-    import OrderBook from '@/components/OrderBook.vue'
     import { computed, ref } from 'vue'
     import { useRoute } from 'vue-router'
     import { storeToRefs } from 'pinia'
     import { useBinanceStore } from '@/stores/binance_socket'
-
-    declare const window: any
 
     const route = useRoute()
 	const binanceStore = useBinanceStore()
@@ -44,50 +41,11 @@
         return getDepthSnapshot.value.bids?.slice(0, 15)
     })
 
-    const CONTAINER_ID = 'vue-trading-view'
-
-    const options = {
-        "width": "100%",
-        'height': '100%',
-        "symbol": `BINANCE:${ticker}`,
-        "interval": "15",
-        "timezone": "Europe/Belgrade",
-        "theme": "dark",
-        "style": "1",
-        "locale": "en",
-        "toolbar_bg": "#f1f3f6",
-        "enable_publishing": false,
-        "hide_side_toolbar": false,
-        "studies": [
-            "Volume@tv-basicstudies",
-            "VWAP@tv-basicstudies"
-        ]
-    }
-
-    const appendScript = (onload: () => void) => {
-        const script = document.createElement('script')
-        script.type = 'text/javascript'
-        script.async = true
-        script.src = 'https://s3.tradingview.com/tv.js'
-        script.onload = onload
-        document.getElementsByTagName('head')[0].appendChild(script)
-    }
-    const initWidget = () => {
-        new window.TradingView.widget(
-            Object.assign({ container_id: CONTAINER_ID },
-            options
-        ));
-    }
-    appendScript(initWidget)
 </script>
 
 <template>
     <div class="flex">
-        <section :id="CONTAINER_ID"></section>
-
-        <OrderBook />
-
-        <!-- <section class="nesto-drugo">
+        <section class="nesto-drugo">
             <div class="mb-20">
                 <p
                     class="text-green-600 m-0.3 text-right"
@@ -109,7 +67,7 @@
                     <span class="text-slate-300">{{ bid[0] }}</span> | {{ bid[1] }}
                 </p>
             </div>
-        </section> -->
+        </section>
     </div>
 </template>
 
@@ -129,11 +87,6 @@
 		border-radius: 4px;
 		color: #304455;
 	}
-
-    #vue-trading-view {
-        width: calc(100% - 200px);
-        height: 100vh !important;
-    }
 
     #app {
         height: 100vh !important
