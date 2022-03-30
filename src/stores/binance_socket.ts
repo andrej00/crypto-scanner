@@ -25,13 +25,13 @@ interface coinsList {}
 // }
 
 interface IUserState {
-  socketConnection: WebSocket;
-  socketSingleTicker: WebSocket;
-  coinsList: Array<object>;
-  tickerInfo: object;
-  prevTickerInfo: object;
-  depthSnapshot: object;
-  binanceStreamLoader: boolean;
+	socketConnection: WebSocket;
+	socketSingleTicker: WebSocket;
+	coinsList: Array<object>;
+	tickerInfo: object;
+	prevTickerInfo: object;
+	depthSnapshot: object;
+	binanceStreamLoader: boolean;
 }
 
 export const useBinanceStore = defineStore("binance_socket", {
@@ -52,33 +52,33 @@ export const useBinanceStore = defineStore("binance_socket", {
 	},
 	actions: {
 		connectToBinanceStream() {
-		this.binanceStreamLoader = true;
+			this.binanceStreamLoader = true;
 
-		console.log("Connecting to BinanceStream");
+			console.log("Connecting to BinanceStream");
 
-		this.socketConnection = new WebSocket(
-			"wss://stream.binance.com:9443/ws/!ticker@arr"
-		);
-		this.socketConnection.onopen = () => {
-			console.log("Connected to BinanceStream");
-		};
+			this.socketConnection = new WebSocket(
+				"wss://stream.binance.com:9443/ws/!ticker@arr"
+			);
+			this.socketConnection.onopen = () => {
+				console.log("Connected to BinanceStream");
+			};
 
-		type cache = {
-			[key: string]: object;
-		};
-		const cache: cache = {};
+			type cache = {
+				[key: string]: object;
+			};
+			const cache: cache = {};
 
-		this.socketConnection!.onmessage = (event: any) => {
-			const list = JSON.parse(event.data) || [];
-			list.forEach((ticker: any) => {
-			cache[ticker.s] = ticker;
-			});
-			this.coinsList = Object.keys(cache).map((s) => cache[s]);
-			this.binanceStreamLoader = false;
-		};
-		this.socketConnection!.onclose = () => {
-			console.log("Closed connection to BinanceStream");
-		};
+			this.socketConnection!.onmessage = (event: any) => {
+				const list = JSON.parse(event.data) || [];
+				list.forEach((ticker: any) => {
+					cache[ticker.s] = ticker;
+				});
+				this.coinsList = Object.keys(cache).map((s) => cache[s]);
+				this.binanceStreamLoader = false;
+			};
+			this.socketConnection!.onclose = () => {
+				console.log("Closed connection to BinanceStream");
+			};
 		},
 
 		disconnectBinanceStream() {
@@ -90,9 +90,7 @@ export const useBinanceStore = defineStore("binance_socket", {
 		},
 
 		connectToTickerStream(symbol: string) {
-			this.socketSingleTicker = new WebSocket(
-				`wss://stream.binance.us:9443/ws/${symbol}@depth`
-			);
+			this.socketSingleTicker = new WebSocket(`wss://stream.binance.us:9443/ws/${symbol}@depth`);
 			let dalje = true;
 
 			this.socketSingleTicker!.onmessage = (event: any) => {
@@ -127,31 +125,31 @@ export const useBinanceStore = defineStore("binance_socket", {
 		},
 
 		updateDepthSnapshot(depth: string, ticker: string) {
-		this.tickerInfo[ticker].map((price: any) => {
-			this.depthSnapshot[depth] = this.depthSnapshot[depth].filter(
-			(price2: any) => {
-				if (price2[0] !== price[0]) {
-				return price2;
+			this.tickerInfo[ticker].map((price: any) => {
+				this.depthSnapshot[depth] = this.depthSnapshot[depth].filter(
+				(price2: any) => {
+					if (price2[0] !== price[0]) {
+					return price2;
+					}
 				}
-			}
-			);
-		});
+				);
+			});
 
-		this.depthSnapshot[depth] = this.depthSnapshot[depth].concat(
-			this.tickerInfo[ticker]
-		);
-		this.tickerInfo[ticker].map((price) => {
-			this.depthSnapshot[depth] = this.depthSnapshot[depth].filter(
-			(price2: any) => {
-				if (price2["1"] !== "0.00000000") {
-				return price;
-				}
-			}
+			this.depthSnapshot[depth] = this.depthSnapshot[depth].concat(
+				this.tickerInfo[ticker]
 			);
-		});
-		this.depthSnapshot[depth] = this.depthSnapshot[depth]
-			.sort((a: Array<number>, b: Array<number>) => a[0] - b[0])
-			.splice(0, 60);
+			this.tickerInfo[ticker].map((price) => {
+				this.depthSnapshot[depth] = this.depthSnapshot[depth].filter(
+				(price2: any) => {
+					if (price2["1"] !== "0.00000000") {
+					return price;
+					}
+				}
+				);
+			});
+			this.depthSnapshot[depth] = this.depthSnapshot[depth]
+				.sort((a: Array<number>, b: Array<number>) => a[0] - b[0])
+				.splice(0, 60);
 		},
 	},
 });
