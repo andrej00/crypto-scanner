@@ -1,19 +1,9 @@
 <script lang="ts" setup>
-    import SearchIcon from '@/assets/SearchIcon.vue'
-    import { ref, computed, toRefs } from 'vue'
-    import { useBinanceStore } from '@/stores/binance_socket'
-    import { storeToRefs } from 'pinia';
+    import SearchIcon from '@/components/icons/SearchIcon.vue'
+    import { computed } from 'vue'
 
-    const binanceStore = useBinanceStore()
     const props = defineProps(['search'])
-    const normalizedSize = computed(() => props.search.toUpperCase())
-
-    let {
-        getCoinsList
-    } = storeToRefs(binanceStore)
-
-    console.log(getCoinsList.value[0])
-
+    const normalizedSize = computed(() => props.search.toUpperCase()
 </script>
 
 <template>
