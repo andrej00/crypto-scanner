@@ -27,8 +27,8 @@
 </script>
 
 <template>
-	<nav class="p-5 pr-15 absolute right-10 top-2">
-		<div class="flex justify-end items-center align-middle">
+	<nav>
+		<div class="flex justify-end items-center align-middle lg:m-7 sm:m-10">
 			<router-link :to="{name: 'home'}" class="nav-link">Home</router-link>
 			<div v-if="!isLoggedIn">
 				<router-link :to="{name: 'sign-in'}" class="nav-link">Sign in</router-link>

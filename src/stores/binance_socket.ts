@@ -51,6 +51,14 @@ export const useBinanceStore = defineStore('binance_socket', {
 		getTickerInfo: (state) => state.tickerInfo,
 		getDepthSnapshot: (state) => state.depthSnapshot,
 		getBinanceStreamLoader: (state) => state.binanceStreamLoader,
+		filteredCoinsList: (state) => (search: string) => {
+			console.log('filteredCoinsList')
+			if (search === '') {
+				console.log('fewpoih')
+			  	return state.coinsList;
+			}
+			return state.coinsList.filter((coin: any) => coin.s === search);
+		},
 	},
 	actions: {
 		connectToBinanceStream () {
