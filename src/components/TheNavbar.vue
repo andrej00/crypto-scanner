@@ -54,7 +54,7 @@
 		@apply text-lg text-slate-300 ml-6 hover:text-sky-500
 	}
 	.sign-up-link {
-		@apply ml-4 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border
+		@apply ml-4 whitespace-nowrap inline-flex items-center justify-center px-3 py-1 border
 		border-transparent rounded-md shadow-sm text-base font-medium text-slate-200 bg-indigo-600
 		hover:bg-indigo-700
 	}

@@ -27,10 +27,14 @@
 			min = quantity[0]
 			max = quantity[numberOfRows - 1]
 		}
-		getDepthSnapshot.value.asks?.slice(0, numberOfRows).map((price) => {
-			price[2] = 10 + ((price[1] - min.value) / (max.value - min.value)) * 90
-		})
-		return getDepthSnapshot.value.asks?.slice(0, numberOfRows).reverse()
+		getDepthSnapshot.value.asks
+			?.slice(0, numberOfRows)
+			.map((price) => {
+				price[2] = 10 + ((price[1] - min.value) / (max.value - min.value)) * 90
+			})
+		return getDepthSnapshot.value.asks
+			?.slice(0, numberOfRows)
+			.reverse()
 	})
 
 	const bids = computed(() => {
@@ -42,9 +46,11 @@
 			min = quantity[0]
 			max = quantity[numberOfRows - 1]
 		}
-		getDepthSnapshot.value.bids?.slice(0, numberOfRows).map((price) => {
-			price[2] = 10 + ((price[1] - min.value) / (max.value - min.value)) * 90
-		})
+		getDepthSnapshot.value.bids
+			?.slice(0, numberOfRows)
+			.map((price) => {
+				price[2] = 10 + ((price[1] - min.value) / (max.value - min.value)) * 90
+			})
 		return getDepthSnapshot.value.bids?.slice(0, numberOfRows)
 	})
 </script>
