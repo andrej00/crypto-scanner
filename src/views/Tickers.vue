@@ -1,4 +1,5 @@
 <script setup lang="ts">
+	import LineChart from '@/components/LineChart.vue'
 	import PageLoader from '@/components/PageLoader.vue'
 	import SearchIcon from '@/components/icons/SearchIcon.vue'
 
@@ -17,6 +18,16 @@
 	} = storeToRefs(binanceStore)
 
 	let search = ref('')
+	let data = ref<number[]>([])
+
+	setInterval(() => {
+		data.value.push(Math.round(Math.random() * 100))
+		if (data.value.length > 20) {
+			data.value = data.value.slice(data.value.length - 20, data.value.length)
+		}
+		console.log(data.value.length)
+	}, 500)
+
 	const favoriteCoinsList = ref(['BTCUSDT', 'ETHUSDT'])
 	console.log(favoriteCoinsList.value.includes('BTCUSDT'))
 
@@ -75,6 +86,9 @@
 					<p class="pb-1">{{ Math.round(coin.v) }}</p>
 					<p>{{ coin.P }}%</p>
 				</span>
+				<LineChart
+					:data="data"
+				/>
 				<button
 					class="border-2 text-sm border-indigo-200/60 text-indigo-200/60 flex m-auto my-3 px-2 py-0.5"
 					@click="router.push({name: 'ticker-chart', params: {id: coin.s}})"
