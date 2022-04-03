@@ -18,25 +18,13 @@
 	} = storeToRefs(binanceStore)
 
 	let search = ref('')
-	let data = ref<number[]>([])
-
-	setInterval(() => {
-		data.value.push(Math.round(Math.random() * 100))
-		if (data.value.length > 20) {
-			data.value = data.value.slice(data.value.length - 20, data.value.length)
-		}
-		console.log(data.value.length)
-	}, 500)
-
 	const favoriteCoinsList = ref(['BTCUSDT', 'ETHUSDT'])
-	console.log(favoriteCoinsList.value.includes('BTCUSDT'))
 
 	const filteredCoinsList = computed(() => {
 		return getCoinsList.value.filter((coin: any) => {
 			return coin.s.includes(search.value.toUpperCase())
 		})
 	})
-
 	const favoriteCoins = computed(() => {
 		return getCoinsList.value.filter((coin: any) => {
 			return favoriteCoinsList.value.includes(coin.s)
@@ -87,8 +75,9 @@
 					<p>{{ coin.P }}%</p>
 				</span>
 				<LineChart
-					:data="data"
+					:data="coin.history"
 				/>
+
 				<button
 					class="border-2 text-sm border-indigo-200/60 text-indigo-200/60 flex m-auto my-3 px-2 py-0.5"
 					@click="router.push({name: 'ticker-chart', params: {id: coin.s}})"
@@ -118,6 +107,9 @@
 					<p class="pb-1">{{ Math.round(coin.v) }}</p>
 					<p>{{ coin.P }}%</p>
 				</span>
+				<LineChart
+					:data="coin.history"
+				/>
 				<button
 					class="border-2 text-sm border-indigo-200/60 text-indigo-200/60 flex m-auto my-3 px-2 py-0.5"
 					@click="router.push({name: 'ticker-chart', params: {id: coin.s}})"

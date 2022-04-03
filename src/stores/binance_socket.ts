@@ -71,6 +71,12 @@ export const useBinanceStore = defineStore("binance_socket", {
 			this.socketConnection!.onmessage = (event: any) => {
 				const list = JSON.parse(event.data) || [];
 				list.forEach((ticker: any) => {
+					let close = parseFloat(ticker.c)
+					ticker.history = cache.hasOwnProperty( ticker.s ) ? cache[ticker.s].history : this.fakeHistory( close );
+					if ( ticker.history.length > 50 ) { 
+						ticker.history = ticker.history.slice( ticker.history.length - 50 )
+					}
+					ticker.history.push(close);
 					cache[ticker.s] = ticker;
 				});
 				this.coinsList = Object.keys(cache).map((s) => cache[s]);
@@ -80,6 +86,20 @@ export const useBinanceStore = defineStore("binance_socket", {
 				console.log("Closed connection to BinanceStream");
 			};
 		},
+
+		fakeHistory(close) {
+			let num = close * 0.00001; // faction of current price
+			let min = -Math.abs( num );
+			let max = Math.abs( num );
+			let out = [];
+	  
+			for ( let i = 0; i < 50; ++i ) {
+				let rand = Math.random() * ( max - min ) + min;
+				out.push( close + rand );
+			// out.push(close)
+			}
+			return out;
+		  },
 
 		disconnectBinanceStream() {
 			this.socketConnection.send({
@@ -97,9 +117,9 @@ export const useBinanceStore = defineStore("binance_socket", {
 				const data = JSON.parse(event.data) || [];
 
 				if (dalje === true) {
-				this.prevTickerInfo = data;
-				dalje = false;
-				return;
+					this.prevTickerInfo = data;
+					dalje = false;
+					return;
 				}
 				this.tickerInfo = data;
 				this.setTickerInfo();

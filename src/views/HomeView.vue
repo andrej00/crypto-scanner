@@ -1,6 +1,5 @@
 <script setup lang="ts">
-	import LineChart from '@/components/LineChart.vue'
-	import { ref, reactive } from 'vue'
+	import { ref } from 'vue'
 
 	let data = ref<number[]>([])
 
@@ -14,17 +13,14 @@
 </script>
 
 <template>
-	<!-- <div class="flex mt-64"> -->
-		<!-- <div class="m-auto"> -->
+	<div class="flex mt-64">
+		<div class="m-auto">
 			<router-link
 				:to="{ name: 'tickers' }"
 				class="text-5xl m-auto text-green-500"
 			>
 				TICKERS
 			</router-link>
-			<LineChart
-				:data="data"
-			/>
-		<!-- </div> -->
-	<!-- </div> -->
+		</div>
+	</div>
 </template>

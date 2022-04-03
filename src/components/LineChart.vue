@@ -1,77 +1,50 @@
-<script lang="ts">
-	import * as d3 from 'd3';
-	export default {
-		name: 'LineChart',
-		props: {
-			data: {
-				required: true,
-				type: Array,
-			},
-			width: {
-				default: 500,
-				type: Number,
-			},
-			height: {
-				default: 270,
-				type: Number,
-			}
-		},
-		data() {
-			return {
-				padding: 10,
-			};
-		},
-		computed: {
-			rangeX() {
-				const width = this.width - this.padding;
-				return [0, width];
-			},
-			rangeY() {
-				const height = this.height - this.padding;
-				return [0, height];
-			},
-			path() {
-				const x = d3.scaleLinear().range(this.rangeX);
-				const y = d3.scaleLinear().range(this.rangeY);
-				d3.axisLeft().scale(x);
-				d3.axisTop().scale(y);
-				x.domain(d3.extent(this.data, (d, i) => i));
-				y.domain([0, d3.max(this.data, d => d)]);
-				return d3.line()
-					.x((d, i) => x(i))
-					.y(d => y(d));
-			},
-			line() {
-				return this.path(this.data);
-			},
-			viewBox() {
-				return `0 0 ${this.width} ${this.height}`;
-			}
-		},
-	};
+<script setup lang='ts'>
+    import { onMounted, ref, watchEffect, defineProps } from 'vue'
+    import * as d3 from 'd3'
+    import useResizeObserver from '@/use/resizeObserver'
+
+    const props = defineProps(['data'])
+    const svgRef = ref(null)
+    const { resizeRef, resizeState } = useResizeObserver()
+
+    onMounted(() => {
+        // pass ref with DOM element to D3, when mounted (DOM available)
+        const svg = d3.select(svgRef.value);
+        // whenever any dependencies (like data, resizeState) change, call this!
+        watchEffect(() => {
+            const { width, height } = resizeState.dimensions;
+            // scales: map index / data values to pixel values on x-axis / y-axis
+            const xScale = d3.scaleLinear()
+                .domain([0, props.data.length - 1])
+                .range([0, width]);
+            const yScale = d3.scaleLinear()
+                .domain([d3.min(props.data), d3.max(props.data)])
+                .range([height, 0]);
+            // line generator: D3 method to transform an array of values to data points ("d") for a path element
+            const lineGen = d3.line()
+                .curve(d3.curveBasis)
+                .x((value, index) => xScale(index))
+                .y((value) => yScale(value));
+            // render path element with D3's General Update Pattern
+            svg
+                .selectAll('.line')
+                .data([props.data]) // pass entire data array
+                .join('path')
+                .attr('class', 'line')
+                .attr('stroke', 'green')
+                .attr('d', lineGen);
+        });
+    });
 </script>
 
 <template>
-	<svg
-		class="line-chart"
-		:viewBox="viewBox"
-	>
-		<g>
-		<path
-			class="line"
-			:d="line"
-		/>
-		</g>
-	</svg>
+    <div ref="resizeRef">
+        <svg ref="svgRef"></svg>
+    </div>
 </template>
 
 <style>
-	.line-chart {
-		margin: 25px;
-	}
 	.line {
-		fill: none;
-		stroke: #76BF8A;
-		stroke-width: 3px;
+		@apply fill-transparent stroke-green-400 stroke-2
 	}
 </style>
