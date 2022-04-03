@@ -1,39 +1,39 @@
 <script setup lang="ts">
-	import LineChart from '@/components/LineChart.vue'
-	import PageLoader from '@/components/PageLoader.vue'
-	import SearchIcon from '@/components/icons/SearchIcon.vue'
+import LineChart from '@/components/LineChart.vue'
+import PageLoader from '@/components/PageLoader.vue'
+import SearchIcon from '@/components/icons/SearchIcon.vue'
 
-	import { onUnmounted, ref, computed, toRefs } from 'vue'
-	import { storeToRefs } from 'pinia'
-	import { useBinanceStore } from '@/stores/binance_socket'
-	import { useRouter } from 'vue-router'
+import { onUnmounted, ref, computed, toRefs } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useBinanceStore } from '@/stores/binance_socket'
+import { useRouter } from 'vue-router'
 
-	const router = useRouter()
-	const binanceStore = useBinanceStore()
-	binanceStore.connectToBinanceStream()
+const router = useRouter()
+const binanceStore = useBinanceStore()
+binanceStore.connectToBinanceStream()
 
-	const {
-		getCoinsList,
-		getBinanceStreamLoader,
-	} = storeToRefs(binanceStore)
+const {
+	getCoinsList,
+	getBinanceStreamLoader,
+} = storeToRefs(binanceStore)
 
-	let search = ref('')
-	const favoriteCoinsList = ref(['BTCUSDT', 'ETHUSDT'])
+let search = ref('')
+const favoriteCoinsList = ref(['BTCUSDT', 'ETHUSDT'])
 
-	const filteredCoinsList = computed(() => {
-		return getCoinsList.value.filter((coin: any) => {
-			return coin.s.includes(search.value.toUpperCase())
-		})
+const filteredCoinsList = computed(() => {
+	return getCoinsList.value.filter((coin: any) => {
+		return coin.s.includes(search.value.toUpperCase())
 	})
-	const favoriteCoins = computed(() => {
-		return getCoinsList.value.filter((coin: any) => {
-			return favoriteCoinsList.value.includes(coin.s)
-		})
+})
+const favoriteCoins = computed(() => {
+	return getCoinsList.value.filter((coin: any) => {
+		return favoriteCoinsList.value.includes(coin.s)
 	})
+})
 
-	onUnmounted(() => {
-		binanceStore.disconnectBinanceStream()
-	})
+onUnmounted(() => {
+	binanceStore.disconnectBinanceStream()
+})
 </script>
 
 <template>
@@ -122,16 +122,16 @@
 </template>
 
 <style scoped>
-	.input-form {
-		@apply flex-auto block px-3 py-1.5 text-base font-normal
-		text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded-l
-		transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600
-		focus:outline-none
-	}
-	.input-button {
-		@apply px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase
-		rounded-r shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700  focus:shadow-lg
-		focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150
-		ease-in-out flex items-center
+.input-form {
+	@apply flex-auto block px-3 py-1.5 text-base font-normal
+	text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded-l
+	transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600
+	focus:outline-none
+}
+.input-button {
+	@apply px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase
+	rounded-r shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700  focus:shadow-lg
+	focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150
+	ease-in-out flex items-center
 }
 </style>

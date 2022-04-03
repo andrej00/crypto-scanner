@@ -88,14 +88,14 @@ export const useBinanceStore = defineStore("binance_socket", {
 		},
 
 		fakeHistory(close) {
-			let num = close * 0.00001; // faction of current price
-			let min = -Math.abs( num );
-			let max = Math.abs( num );
+			let num = close * 0.0001; // faction of current price
+			let min = -Math.abs(num);
+			let max = Math.abs(num);
 			let out = [];
 	  
 			for ( let i = 0; i < 50; ++i ) {
-				let rand = Math.random() * ( max - min ) + min;
-				out.push( close + rand );
+				let rand = Math.random() * (max - min) + min;
+				out.push(close + rand);
 			// out.push(close)
 			}
 			return out;

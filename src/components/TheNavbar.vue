@@ -1,28 +1,28 @@
 <script setup lang="ts">
-	import { onMounted, ref } from "vue"
-	import { getAuth, onAuthStateChanged, signOut } from "firebase/auth"
-	import { useRouter } from "vue-router"
+import { onMounted, ref } from "vue"
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth"
+import { useRouter } from "vue-router"
 
-	const router = useRouter()
+const router = useRouter()
 
-	const isLoggedIn = ref(false)
-	let auth
+const isLoggedIn = ref(false)
+let auth
 
-	onMounted(() => {
-		auth = getAuth()
-		onAuthStateChanged(auth, (user) => {
-			if (user) {
-				isLoggedIn.value = true
-			} else {
-				isLoggedIn.value = false
-			}
-		})
+onMounted(() => {
+	auth = getAuth()
+	onAuthStateChanged(auth, (user) => {
+		if (user) {
+			isLoggedIn.value = true
+		} else {
+			isLoggedIn.value = false
+		}
 	})
+})
 
-	const handleSignout = async () => {
-		await signOut(auth)
-		router.push({ name: "home" })
-	}
+const handleSignout = async () => {
+	await signOut(auth)
+	router.push({ name: "home" })
+}
 </script>
 
 <template>
@@ -50,12 +50,12 @@
 </template>
 
 <style>
-	.nav-link {
-		@apply text-lg text-slate-300 ml-6 hover:text-sky-500
-	}
-	.sign-up-link {
-		@apply ml-4 whitespace-nowrap inline-flex items-center justify-center px-3 py-1 border
-		border-transparent rounded-md shadow-sm text-base font-medium text-slate-200 bg-indigo-600
-		hover:bg-indigo-700
-	}
+.nav-link {
+	@apply text-lg text-slate-300 ml-6 hover:text-sky-500
+}
+.sign-up-link {
+	@apply ml-4 whitespace-nowrap inline-flex items-center justify-center px-3 py-1 border
+	border-transparent rounded-md shadow-sm text-base font-medium text-slate-200 bg-indigo-600
+	hover:bg-indigo-700
+}
 </style>
