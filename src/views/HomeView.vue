@@ -1,15 +1,5 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-
-let data = ref<number[]>([])
-
-setInterval(() => {
-	data.value.push(Math.round(Math.random() * 100))
-	if (data.value.length > 20) {
-		data.value = data.value.slice(data.value.length - 20, data.value.length)
-	}
-	console.log(data.value.length)
-}, 500)
 </script>
 
 <template>

@@ -18,7 +18,7 @@ const {
 } = storeToRefs(binanceStore)
 
 let search = ref('')
-const favoriteCoinsList = ref(['BTCUSDT', 'ETHUSDT'])
+const favoriteCoinsList = ref(['BTCUSDT', 'ETHUSDT', 'NEARUSDT', 'LINKUSDT', 'WAVESUSDT'])
 
 const filteredCoinsList = computed(() => {
 	return getCoinsList.value.filter((coin: any) => {
@@ -43,8 +43,6 @@ onUnmounted(() => {
 	<section
 		v-else
 	>
-	<h1 class="text-slate-100">
-	</h1>
 		<div class="flex justify-end lg:mr-7 sm:mr-10">
 			<div class="mb-3 xl:w-96">
 				<div class="flex flex-wrap items-stretch w-full">
@@ -76,6 +74,7 @@ onUnmounted(() => {
 				</span>
 				<LineChart
 					:data="coin.history"
+					:percentage="coin.P"
 				/>
 
 				<button
@@ -89,7 +88,7 @@ onUnmounted(() => {
 
 		<hr>
 
-		<div
+		<!-- <div
 			class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 py-20 lg:px-14 sm:px-3"
 		>
 			<div
@@ -109,6 +108,7 @@ onUnmounted(() => {
 				</span>
 				<LineChart
 					:data="coin.history"
+					:percentage="coin.P"
 				/>
 				<button
 					class="border-2 text-sm border-indigo-200/60 text-indigo-200/60 flex m-auto my-3 px-2 py-0.5"
@@ -117,7 +117,7 @@ onUnmounted(() => {
 					CHART
 				</button>
 			</div>
-		</div>
+		</div> -->
 	</section>
 </template>
 

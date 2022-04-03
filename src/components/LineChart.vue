@@ -2,7 +2,7 @@
 import { onMounted, ref, watchEffect, defineProps, onBeforeUnmount, reactive } from 'vue'
 import * as d3 from 'd3'
 
-const props = defineProps(['data'])
+const props = defineProps(['data', 'percentage'])
 const svgRef = ref(null)
 const resizeRef = ref()
 const resizeState = reactive({
@@ -16,6 +16,7 @@ const observer = new ResizeObserver(entries => {
 })
 
 onMounted(() => {
+	const chartColor = parseFloat(props.percentage) < 0
 	resizeState.dimensions = resizeRef.value.getBoundingClientRect()
 	observer.observe(resizeRef.value)
 	// pass ref with DOM element to D3, when mounted (DOM available)
@@ -34,7 +35,7 @@ onMounted(() => {
 		const lineGen = d3.line()
 			.curve(d3.curveBasis)
 			.x((value, index) => xScale(index))
-			.y((value) => yScale(value))
+			.y(yScale)
 		// render path element with D3's General Update Pattern
 		svg
 			.selectAll('.line')
@@ -42,6 +43,7 @@ onMounted(() => {
 			.join('path')
 			.attr('class', 'line')
 			.attr('stroke', 'green')
+			.classed('red-line', chartColor)
 			.attr('d', lineGen)
 	})
 })
@@ -60,5 +62,8 @@ onBeforeUnmount(() => {
 <style>
 .line {
 	@apply fill-transparent stroke-green-400 stroke-2
+}
+.red-line {
+	@apply fill-transparent stroke-red-600 stroke-2
 }
 </style>

@@ -72,9 +72,9 @@ export const useBinanceStore = defineStore("binance_socket", {
 				const list = JSON.parse(event.data) || [];
 				list.forEach((ticker: any) => {
 					let close = parseFloat(ticker.c)
-					ticker.history = cache.hasOwnProperty( ticker.s ) ? cache[ticker.s].history : this.fakeHistory( close );
-					if ( ticker.history.length > 50 ) { 
-						ticker.history = ticker.history.slice( ticker.history.length - 50 )
+					ticker.history = cache.hasOwnProperty(ticker.s) ? cache[ticker.s].history : this.fakeHistory(close);
+					if (ticker.history.length > 20) { 
+						ticker.history = ticker.history.slice(ticker.history.length - 20)
 					}
 					ticker.history.push(close);
 					cache[ticker.s] = ticker;
@@ -88,15 +88,14 @@ export const useBinanceStore = defineStore("binance_socket", {
 		},
 
 		fakeHistory(close) {
-			let num = close * 0.0001; // faction of current price
+			let num = close * 0.0001;
 			let min = -Math.abs(num);
 			let max = Math.abs(num);
 			let out = [];
 	  
-			for ( let i = 0; i < 50; ++i ) {
+			for (let i = 0; i < 20; ++i) {
 				let rand = Math.random() * (max - min) + min;
 				out.push(close + rand);
-			// out.push(close)
 			}
 			return out;
 		  },
