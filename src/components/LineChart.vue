@@ -1,30 +1,40 @@
 <script setup lang='ts'>
-import { onMounted, ref, watchEffect, defineProps } from 'vue'
+import { onMounted, ref, watchEffect, defineProps, onBeforeUnmount, reactive } from 'vue'
 import * as d3 from 'd3'
-import useResizeObserver from '@/use/resizeObserver'
 
 const props = defineProps(['data'])
 const svgRef = ref(null)
-const { resizeRef, resizeState } = useResizeObserver()
+const resizeRef = ref()
+const resizeState = reactive({
+	dimensions: {}
+})
+
+const observer = new ResizeObserver(entries => {
+	entries.forEach(entry => {
+		resizeState.dimensions = entry.contentRect
+	})
+})
 
 onMounted(() => {
+	resizeState.dimensions = resizeRef.value.getBoundingClientRect()
+	observer.observe(resizeRef.value)
 	// pass ref with DOM element to D3, when mounted (DOM available)
-	const svg = d3.select(svgRef.value);
+	const svg = d3.select(svgRef.value)
 	// whenever any dependencies (like data, resizeState) change, call this!
 	watchEffect(() => {
-		const { width, height } = resizeState.dimensions;
+		const { width, height } = resizeState.dimensions
 		// scales: map index / data values to pixel values on x-axis / y-axis
 		const xScale = d3.scaleLinear()
 			.domain([0, props.data.length - 1])
-			.range([0, width]);
+			.range([0, width])
 		const yScale = d3.scaleLinear()
 			.domain([d3.min(props.data), d3.max(props.data)])
-			.range([height, 0]);
+			.range([height, 0])
 		// line generator: D3 method to transform an array of values to data points ("d") for a path element
 		const lineGen = d3.line()
 			.curve(d3.curveBasis)
 			.x((value, index) => xScale(index))
-			.y((value) => yScale(value));
+			.y((value) => yScale(value))
 		// render path element with D3's General Update Pattern
 		svg
 			.selectAll('.line')
@@ -32,9 +42,13 @@ onMounted(() => {
 			.join('path')
 			.attr('class', 'line')
 			.attr('stroke', 'green')
-			.attr('d', lineGen);
-	});
-});
+			.attr('d', lineGen)
+	})
+})
+
+onBeforeUnmount(() => {
+	observer.unobserve(resizeRef.value)
+})
 </script>
 
 <template>
