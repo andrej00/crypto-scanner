@@ -18,7 +18,7 @@ const {
 } = storeToRefs(binanceStore)
 
 let search = ref('')
-const favoriteCoinsList = ref(['BTCUSDT', 'ETHUSDT', 'NEARUSDT', 'LINKUSDT', 'WAVESUSDT'])
+const favoriteCoinsList = ref(['BTCUSDT', 'ETHUSDT'])
 
 const filteredCoinsList = computed(() => {
 	return getCoinsList.value.filter((coin: any) => {
@@ -55,7 +55,7 @@ onUnmounted(() => {
 		</div>
 
 		<div
-			class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 py-20 lg:px-14 sm:px-3"
+			class="grid sm:grid-cols-2 xl:grid-cols-3 gap-3 py-20 lg:px-14 px-3"
 		>
 			<div
 				class="rounded-md border-2 y-3"
@@ -72,10 +72,12 @@ onUnmounted(() => {
 					<p class="pb-1">{{ Math.round(coin.v) }}</p>
 					<p>{{ coin.P }}%</p>
 				</span>
-				<LineChart
-					:data="coin.history"
-					:percentage="coin.P"
-				/>
+				<div class="line-chart">
+					<LineChart
+						:data="coin.history"
+						:percentage="coin.P"
+					/>
+				</div>
 
 				<button
 					class="border-2 text-sm border-indigo-200/60 text-indigo-200/60 flex m-auto my-3 px-2 py-0.5"

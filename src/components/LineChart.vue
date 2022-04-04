@@ -38,12 +38,12 @@ onMounted(() => {
 			.y(yScale)
 		// render path element with D3's General Update Pattern
 		svg
-			.selectAll('.line')
+			.selectAll('.chart-line')
 			.data([props.data]) // pass entire data array
 			.join('path')
-			.attr('class', 'line')
+			.attr('class', 'chart-line')
 			.attr('stroke', 'green')
-			.classed('red-line', chartColor)
+			.classed('chart-red-line', chartColor)
 			.attr('d', lineGen)
 	})
 })
@@ -60,10 +60,13 @@ onBeforeUnmount(() => {
 </template>
 
 <style>
-.line {
+.chart-line {
 	@apply fill-transparent stroke-green-400 stroke-2
 }
-.red-line {
+.chart-red-line {
 	@apply fill-transparent stroke-red-600 stroke-2
+}
+.line-chart svg {
+	@apply w-full
 }
 </style>

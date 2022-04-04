@@ -40,8 +40,8 @@ appendScript(initWidget)
 </script>
 
 <template>
-	<div class="flex">
-		<section :id="TRADING_VIEW_ID"></section>
+	<div class="flex lg:flex-row flex-col">
+		<section :id="TRADING_VIEW_ID" class="sm:w-screen"></section>
 		<OrderBook />
 	</div>
 </template>

@@ -58,8 +58,8 @@ const bids = computed(() => {
 </script>
 
 <template>
-	<section class="flex">
-		<div class="order-book overflow-auto">
+	<section class="">
+		<div class="order-book overflow-auto flex lg:flex-col sm:flex-row">
 			<div>
 				<p
 					class="text-green-600 m-0.3 text-right"
@@ -69,9 +69,9 @@ const bids = computed(() => {
 				>
 					<span class="text-slate-300">{{ parseFloat(ask[0]) }}</span> | {{ ask[1] }}
 				</p>
-
-				<hr class="my-2" />
-
+			</div>
+			<hr class="my-2" />
+			<div>
 				<p
 					class="text-red-500 p-0.3 text-right"
 					v-for="bid in bids"
@@ -88,9 +88,5 @@ const bids = computed(() => {
 <style>
 #app {
 	@apply h-screen
-}
-
-.order-book {
-	width: 220px
 }
 </style>
