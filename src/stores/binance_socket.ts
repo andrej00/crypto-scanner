@@ -1,36 +1,58 @@
 import { defineStore } from "pinia";
 import axios from "axios";
 
-interface coinsList {}
+type TickerInfo = {
+	e?: string
+	E?: number
+	s?: string
+	U?: number
+	u?: number
+	b?: Array<string>
+	a?: Array<string>
+}
 
-// {
-//     "symbol": "LTCBTC",
-//     "token": "LTC",
-//     "asset": "BTC",
-//     "name": "LTC",
-//     "pair": "LTC/BTC",
-//     "open": 0.002592,
-//     "high": 0.002632,
-//     "low": 0.002527,
-//     "close": 0.002542,
-//     "change": -0.00005,
-//     "percent": -1.929,
-//     "trades": 23718,
-//     "tokenVolume": 79384,
-//     "assetVolume": 205,
-//     "sign": "",
-//     "arrow": "▼",
-//     "style": "loss",
-//     "info": "LTC/BTC 0.00254200 ( ▼ -1.93% | -0.00005000 )"
-// }
+type CoinsList = {
+	e: string
+	E: number
+	s: string
+	p: string
+	P: string
+	w: string
+	x: string
+	c:string
+	Q: string
+	b: string
+	B:string
+	a: string
+	A: string
+	o: string
+	h: string
+	l: string
+	v: string
+	q: string
+	O: number
+	C: number
+	F: number
+	L: number
+	n: number
+	history: Array<number>
+	token: string
+	asset: string
+}
+
+type DepthSnapshot = {
+	lastUpdateId: number
+	asks: Array<string>
+	bids: Array<string>
+}
 
 interface IUserState {
 	socketConnection: WebSocket;
 	socketSingleTicker: WebSocket;
-	coinsList: Array<object>;
-	tickerInfo: object;
+	coinsList: Array<CoinsList>;
+	tickerInfo: Partial<TickerInfo>;
 	prevTickerInfo: object;
-	depthSnapshot: object;
+	depthSnapshot: Partial<DepthSnapshot>;
 	binanceStreamLoader: boolean;
 }
 
@@ -76,6 +98,10 @@ export const useBinanceStore = defineStore("binance_socket", {
 					if (ticker.history.length > 20) { 
 						ticker.history = ticker.history.slice(ticker.history.length - 20)
 					}
+					let reg         = /^([A-Z]+)(BTC|ETH|BNB|USDT|TUSD)$/;
+					let symbol      = String( ticker.s ).replace( /[^\w\-]+/g, '' ).toUpperCase();
+					ticker.token    = symbol.replace( reg, '$1' );
+					ticker.asset    = symbol.replace( reg, '$2' );
 					ticker.history.push(close);
 					cache[ticker.s] = ticker;
 				});
@@ -87,7 +113,7 @@ export const useBinanceStore = defineStore("binance_socket", {
 			};
 		},
 
-		fakeHistory(close) {
+		fakeHistory(close: number) {
 			let num = close * 0.0001;
 			let min = -Math.abs(num);
 			let max = Math.abs(num);
@@ -134,7 +160,7 @@ export const useBinanceStore = defineStore("binance_socket", {
 		},
 
 		setTickerInfo() {
-			if (this.tickerInfo.u <= this.depthSnapshot.lastUpdateId) {
+			if (this.tickerInfo.u && this.depthSnapshot.lastUpdateId && this.tickerInfo.u <= this.depthSnapshot.lastUpdateId) {
 				return;
 			}
 			if (this.tickerInfo.U === this.prevTickerInfo.u + 1) {
@@ -144,26 +170,28 @@ export const useBinanceStore = defineStore("binance_socket", {
 		},
 
 		updateDepthSnapshot(depth: string, ticker: string) {
-			this.tickerInfo[ticker].map((price: any) => {
-				this.depthSnapshot[depth] = this.depthSnapshot[depth].filter(
-				(price2: any) => {
-					if (price2[0] !== price[0]) {
-					return price2;
+			if (this.tickerInfo[ticker] !== undefined) {
+				this.tickerInfo[ticker].map((price: any) => {
+					this.depthSnapshot[depth] = this.depthSnapshot[depth].filter(
+					(price2: any) => {
+						if (price2[0] !== price[0]) {
+						return price2;
+						}
 					}
-				}
-				);
-			});
+					);
+				});
+			}
 
 			this.depthSnapshot[depth] = this.depthSnapshot[depth].concat(
 				this.tickerInfo[ticker]
 			);
 			this.tickerInfo[ticker].map((price) => {
 				this.depthSnapshot[depth] = this.depthSnapshot[depth].filter(
-				(price2: any) => {
-					if (price2["1"] !== "0.00000000") {
-					return price;
+					(price2: any) => {
+						if (price2["1"] !== "0.00000000") {
+						return price;
+						}
 					}
-				}
 				);
 			});
 			this.depthSnapshot[depth] = this.depthSnapshot[depth]

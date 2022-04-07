@@ -41,24 +41,24 @@ const signIn = async () => {
             </div>
             <div class="mt-8 space-y-6">
                 <div>
-                <input
-                    type="email"
-                    v-model="email"
-                    autocomplete="email"
-                    required
-                    class="input-form"
-                    placeholder="Email address"
-                />
+					<input
+						type="email"
+						v-model="email"
+						autocomplete="email"
+						required
+						class="input-form"
+						placeholder="Email address"
+					/>
                 </div>
                 <div>
-                <input
-                    type="password"
-                    v-model="password"
-                    autocomplete="current-password"
-                    required
-                    class="input-form"
-                    placeholder="Password"
-                />
+					<input
+						type="password"
+						v-model="password"
+						autocomplete="current-password"
+						required
+						class="input-form"
+						placeholder="Password"
+					/>
                 </div>
                 <button type="submit" @click="signIn" class="sign-up-button">
                     Sign in

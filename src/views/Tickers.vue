@@ -30,6 +30,9 @@ const favoriteCoins = computed(() => {
 		return favoriteCoinsList.value.includes(coin.s)
 	})
 })
+const getCoinImage = (token: string) => {	
+	return `https://raw.githubusercontent.com/rainner/binance-watch/master/public/images/icons/${token.toLowerCase()}_.png`
+}
 
 onUnmounted(() => {
 	binanceStore.disconnectBinanceStream()
@@ -58,37 +61,62 @@ onUnmounted(() => {
 			class="grid sm:grid-cols-2 xl:grid-cols-3 gap-3 py-20 lg:px-14 px-3"
 		>
 			<div
-				class="rounded-md border-2 y-3"
-				:class="[coin['P'] > 0 ? 'border-green-400' : 'border-red-600']"
+				class="rounded-md bg-gray-900 cursor-pointer"
 				v-for="coin in favoriteCoins"
 				:key="coin['s']"
+				@click="router.push({name: 'ticker-chart', params: {id: coin.s}})"
 			>
-				<span
-					class="text-2xl text-center"
-					:class="[coin.P > 0 ? 'text-green-400' : 'text-red-600']"
+				<div 
+					class="flex p-4 border-solid border-b-2 border-gray-800"
 				>
-					<p class="py-1">{{ parseFloat(coin.c) }}</p>
-					<p class="pb-1">{{ coin.s }}</p>
-					<p class="pb-1">{{ Math.round(coin.v) }}</p>
-					<p>{{ coin.P }}%</p>
-				</span>
-				<div class="line-chart">
+					<img :src="getCoinImage(coin.token)" class="w-16 mr-4" alt="">
+					<div>
+						<p 
+							class="text-xl pb-1"
+							:class="[parseFloat(coin.P) > 0 ? 'text-green-400' : 'text-red-600']"
+						>
+							<span class="font-bold text-2xl">{{ coin.token }}</span> / {{ coin.asset }}
+						</p>
+						<p 
+							class="text-lg"
+							:class="[parseFloat(coin.P) > 0 ? 'text-green-400' : 'text-red-600']"
+						>
+							{{ parseFloat(coin.c) }}
+						</p>
+					</div>
+
+					<div class="ml-auto">
+						<p 
+							class="text-lg text-right"
+							:class="[parseFloat(coin.P) > 0 ? 'text-green-400' : 'text-red-600']"
+						>
+							{{ Math.round(parseFloat(coin.v)) }}
+						</p>
+						<p 
+							class="text-lg text-right"
+							:class="[parseFloat(coin.P) > 0 ? 'text-green-400' : 'text-red-600']"
+						>
+							{{ coin.P }}%
+						</p>
+					</div>
+				</div>
+				<div class="line-chart p-4">
 					<LineChart
 						:data="coin.history"
 						:percentage="coin.P"
 					/>
 				</div>
 
-				<button
+				<!-- <button
 					class="border-2 text-sm border-indigo-200/60 text-indigo-200/60 flex m-auto my-3 px-2 py-0.5"
 					@click="router.push({name: 'ticker-chart', params: {id: coin.s}})"
 				>
 					CHART
-				</button>
+				</button> -->
 			</div>
 		</div>
 
-		<hr>
+		<!-- <hr> -->
 
 		<!-- <div
 			class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 py-20 lg:px-14 sm:px-3"

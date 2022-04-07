@@ -9,6 +9,11 @@ const resizeState = reactive({
 	dimensions: {}
 })
 
+interface ResizeStateDimensions {
+	width?: number
+	height?: number
+}
+
 const observer = new ResizeObserver(entries => {
 	entries.forEach(entry => {
 		resizeState.dimensions = entry.contentRect
@@ -16,14 +21,16 @@ const observer = new ResizeObserver(entries => {
 })
 
 onMounted(() => {
-	const chartColor = parseFloat(props.percentage) < 0
+	const chartColor = parseFloat(props.percentage) > 0
+	console.log(parseFloat(props.percentage))
+	console.log(chartColor)
 	resizeState.dimensions = resizeRef.value.getBoundingClientRect()
 	observer.observe(resizeRef.value)
 	// pass ref with DOM element to D3, when mounted (DOM available)
 	const svg = d3.select(svgRef.value)
 	// whenever any dependencies (like data, resizeState) change, call this!
 	watchEffect(() => {
-		const { width, height } = resizeState.dimensions
+		const { width, height }: ResizeStateDimensions = resizeState.dimensions
 		// scales: map index / data values to pixel values on x-axis / y-axis
 		const xScale = d3.scaleLinear()
 			.domain([0, props.data.length - 1])
@@ -34,17 +41,17 @@ onMounted(() => {
 		// line generator: D3 method to transform an array of values to data points ("d") for a path element
 		const lineGen = d3.line()
 			.curve(d3.curveBasis)
-			.x((value, index) => xScale(index))
+			.x((value, index: number) => xScale(index))
 			.y(yScale)
-		// render path element with D3's General Update Pattern
 		svg
 			.selectAll('.chart-line')
 			.data([props.data]) // pass entire data array
 			.join('path')
 			.attr('class', 'chart-line')
 			.attr('stroke', 'green')
-			.classed('chart-red-line', chartColor)
+			.classed('chart-green-line', chartColor)
 			.attr('d', lineGen)
+			// add a dot at the end of the line
 	})
 })
 
@@ -60,10 +67,10 @@ onBeforeUnmount(() => {
 </template>
 
 <style>
-.chart-line {
+.chart-green-line {
 	@apply fill-transparent stroke-green-400 stroke-2
 }
-.chart-red-line {
+.chart-line {
 	@apply fill-transparent stroke-red-600 stroke-2
 }
 .line-chart svg {
