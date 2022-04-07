@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-import { computed, ref, watch } from 'vue'
+import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useBinanceStore } from '@/stores/binance_socket'
@@ -7,52 +7,53 @@ import { useBinanceStore } from '@/stores/binance_socket'
 const route = useRoute()
 const binanceStore = useBinanceStore()
 
-const ticker = route.params.id
+const ticker: string = route.params.id as string
+const numberOfRows = ref(15)
 
 binanceStore.connectToTickerStream(ticker.toLowerCase())
 binanceStore.fetchDepthSnapShot(ticker)
 
 const { getDepthSnapshot } = storeToRefs(binanceStore)
 
-let min = ref(0)
-let max = ref(0)
-const numberOfRows = 15
-
 const asks = computed(() => {
+	let min = ref(0)
+	let max = ref(0)
 	let quantity = getDepthSnapshot.value.asks
-		?.slice(0, numberOfRows)
+		?.slice(0, numberOfRows.value)
 		.map((q) => q[1])
-		.sort((a, b) => a - b)
+		.sort((a: any, b: any) => a - b)
 	if (quantity) {
-		min = quantity[0]
-		max = quantity[numberOfRows - 1]
+		min.value = parseFloat(quantity[0])
+		max.value = parseFloat(quantity[numberOfRows.value - 1])
 	}
 	getDepthSnapshot.value.asks
-		?.slice(0, numberOfRows)
-		.map((ask) => {
-			ask[2] = 10 + ((ask[1] - min) / (max - min)) * 90
+		?.slice(0, numberOfRows.value)
+		.map((ask: any) => {
+			ask[2] = 10 + ((ask[1] - min.value) / (max.value - min.value)) * 90
 		})
 	return getDepthSnapshot.value.asks
-		?.slice(0, numberOfRows)
+		?.slice(0, numberOfRows.value)
 		.reverse()
 })
 
 const bids = computed(() => {
+	let min = ref(0)
+	let max = ref(0)
 	let quantity = getDepthSnapshot.value.bids
-		?.slice(0, numberOfRows)
+		?.slice(0, numberOfRows.value)
 		.map((q) => q[1])
-		.sort((a, b) => a - b)
+		.sort((a: any, b: any) => a - b)
 	if (quantity) {
-		min = quantity[0]
-		max = quantity[numberOfRows - 1]
+		min.value = parseFloat(quantity[0])
+		max.value = parseFloat(quantity[numberOfRows.value - 1])
 	}
 	getDepthSnapshot.value.bids
-		?.slice(0, numberOfRows)
-		.map((bid) => {
-			bid[2] = 10 + ((bid[1] - min) / (max - min)) * 90
+		?.slice(0, numberOfRows.value)
+		.map((bid: any) => {
+			bid[2] = 10 + ((bid[1] - min.value) / (max.value - min.value)) * 90
 		})
 	return getDepthSnapshot.value.bids
-		?.slice(0, numberOfRows)
+		?.slice(0, numberOfRows.value)
 		.reverse()
 })
 </script>

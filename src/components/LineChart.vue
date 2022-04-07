@@ -22,8 +22,6 @@ const observer = new ResizeObserver(entries => {
 
 onMounted(() => {
 	const chartColor = parseFloat(props.percentage) > 0
-	console.log(parseFloat(props.percentage))
-	console.log(chartColor)
 	resizeState.dimensions = resizeRef.value.getBoundingClientRect()
 	observer.observe(resizeRef.value)
 	// pass ref with DOM element to D3, when mounted (DOM available)
@@ -51,7 +49,6 @@ onMounted(() => {
 			.attr('stroke', 'green')
 			.classed('chart-green-line', chartColor)
 			.attr('d', lineGen)
-			// add a dot at the end of the line
 	})
 })
 

@@ -21,12 +21,12 @@ let search = ref('')
 const favoriteCoinsList = ref(['BTCUSDT', 'ETHUSDT'])
 
 const filteredCoinsList = computed(() => {
-	return getCoinsList.value.filter((coin: any) => {
+	return getCoinsList.value.filter((coin) => {
 		return coin.s.includes(search.value.toUpperCase())
 	})
 })
 const favoriteCoins = computed(() => {
-	return getCoinsList.value.filter((coin: any) => {
+	return getCoinsList.value.filter((coin) => {
 		return favoriteCoinsList.value.includes(coin.s)
 	})
 })
