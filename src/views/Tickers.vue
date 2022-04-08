@@ -46,7 +46,7 @@ onUnmounted(() => {
 	<section
 		v-else
 	>
-		<div class="flex justify-end lg:mr-7 sm:mr-10">
+		<div class="flex justify-end lg:mr-7 mr-9">
 			<div class="mb-3 xl:w-96">
 				<div class="flex flex-wrap items-stretch w-full">
 					<input type="search" class="input-form" v-model="search" placeholder="Search" aria-label="Search" aria-describedby="button-addon2">

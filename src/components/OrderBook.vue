@@ -21,7 +21,7 @@ const asks = computed(() => {
 	let quantity = getDepthSnapshot.value.asks
 		?.slice(0, numberOfRows.value)
 		.map((q) => q[1])
-		.sort((a: any, b: any) => a - b)
+		.sort((a: string, b: string) => parseFloat(a) - parseFloat(b))
 	if (quantity) {
 		min.value = parseFloat(quantity[0])
 		max.value = parseFloat(quantity[numberOfRows.value - 1])

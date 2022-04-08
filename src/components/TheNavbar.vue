@@ -27,7 +27,7 @@ const handleSignout = async () => {
 
 <template>
 	<nav>
-		<div class="flex justify-end items-center align-middle lg:m-7 sm:m-10">
+		<div class="flex justify-end items-center align-middle lg:m-7 my-6  mr-9">
 		<router-link :to="{ name: 'home' }" class="nav-link">Home</router-link>
 		<div v-if="!isLoggedIn">
 			<router-link :to="{ name: 'sign-in' }" class="nav-link">
