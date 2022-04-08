@@ -59,29 +59,27 @@ const bids = computed(() => {
 </script>
 
 <template>
-	<section class="">
-		<div class="order-book overflow-auto flex lg:flex-col sm:flex-row">
-			<div>
-				<p
-					class="text-green-600 m-0.3 text-right"
-					v-for="ask in asks"
-					:key="ask[0]"
-					:style="`background-image: -webkit-linear-gradient(right, rgb(50, 205, 50, 0.25), rgb(50, 205, 50, 0.25) ${ask[2]}%, transparent ${ask[2]}%)`"
-				>
-					<span class="text-slate-300">{{ parseFloat(ask[0]) }}</span> | {{ ask[1] }}
-				</p>
-			</div>
-			<hr class="my-2" />
-			<div>
-				<p
-					class="text-red-500 p-0.3 text-right"
-					v-for="bid in bids"
-					:key="bid[0]"
-					:style="`background-image: -webkit-linear-gradient(right, rgb(255, 69, 0, 0.25), rgb(255, 69, 0, 0.25) ${bid[2]}%, transparent ${bid[2]}%)`"
-				>
-					<span class="text-slate-300">{{ parseFloat(bid[0]) }}</span> | {{ bid[1] }}
-				</p>
-			</div>
+	<section class="order-book">
+		<div class="pr-12 lg:p-0">
+			<p
+				class="text-green-600 m-0.3 text-right"
+				v-for="ask in asks"
+				:key="ask[0]"
+				:style="`background-image: -webkit-linear-gradient(right, rgb(50, 205, 50, 0.25), rgb(50, 205, 50, 0.25) ${ask[2]}%, transparent ${ask[2]}%)`"
+			>
+				<span class="text-slate-300">{{ parseFloat(ask[0]) }}</span> | {{ ask[1] }}
+			</p>
+		</div>
+		<hr class="my-2"/>
+		<div>
+			<p
+				class="text-red-500 p-0.3 text-right"
+				v-for="bid in bids"
+				:key="bid[0]"
+				:style="`background-image: -webkit-linear-gradient(right, rgb(255, 69, 0, 0.25), rgb(255, 69, 0, 0.25) ${bid[2]}%, transparent ${bid[2]}%)`"
+			>
+				<span class="text-slate-300">{{ parseFloat(bid[0]) }}</span> | {{ bid[1] }}
+			</p>
 		</div>
 	</section>
 </template>
@@ -89,5 +87,8 @@ const bids = computed(() => {
 <style>
 #app {
 	@apply h-screen
+}
+.order-book {
+	@apply m-auto flex flex-row lg:flex-col w-screen lg:w-1/6 justify-center
 }
 </style>

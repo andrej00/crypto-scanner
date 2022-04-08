@@ -18,7 +18,7 @@ const {
 } = storeToRefs(binanceStore)
 
 let search = ref('')
-const favoriteCoinsList = ref(['BTCUSDT', 'ETHUSDT'])
+const favoriteCoinsList = ref(['BTCUSDT', 'ETHUSDT', 'LTCUSDT'])
 
 const filteredCoinsList = computed(() => {
 	return getCoinsList.value.filter((coin) => {
@@ -58,10 +58,10 @@ onUnmounted(() => {
 		</div>
 
 		<div
-			class="grid sm:grid-cols-2 xl:grid-cols-3 gap-3 py-20 lg:px-14 px-3"
+			class="grid md:grid-cols-2 xl:grid-cols-3 gap-3 py-20 lg:px-14 px-3"
 		>
 			<div
-				class="rounded-md bg-gray-900 cursor-pointer"
+				class="rounded-md bg-gray-900 cursor-pointer hover:shadow-xl"
 				v-for="coin in favoriteCoins"
 				:key="coin['s']"
 				@click="router.push({name: 'ticker-chart', params: {id: coin.s}})"
@@ -71,13 +71,13 @@ onUnmounted(() => {
 				>
 					<img :src="getCoinImage(coin.token)" class="w-16 mr-4" alt="">
 					<div>
-						<p 
+						<p
 							class="text-xl pb-1"
 							:class="[parseFloat(coin.P) > 0 ? 'text-green-400' : 'text-red-600']"
 						>
 							<span class="font-bold text-2xl">{{ coin.token }}</span> / {{ coin.asset }}
 						</p>
-						<p 
+						<p
 							class="text-lg"
 							:class="[parseFloat(coin.P) > 0 ? 'text-green-400' : 'text-red-600']"
 						>
@@ -85,14 +85,14 @@ onUnmounted(() => {
 						</p>
 					</div>
 
-					<div class="ml-auto">
-						<p 
+					<div class="ml-auto flex flex-col justify-around">
+						<p
 							class="text-lg text-right"
 							:class="[parseFloat(coin.P) > 0 ? 'text-green-400' : 'text-red-600']"
 						>
-							{{ Math.round(parseFloat(coin.v)) }}
+							<span class="pr-2">Vol:</span> {{ Math.round(parseFloat(coin.v)) }}
 						</p>
-						<p 
+						<p
 							class="text-lg text-right"
 							:class="[parseFloat(coin.P) > 0 ? 'text-green-400' : 'text-red-600']"
 						>

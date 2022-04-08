@@ -40,15 +40,9 @@ appendScript(initWidget)
 </script>
 
 <template>
-	<div class="flex lg:flex-row flex-col">
-		<section :id="TRADING_VIEW_ID" class="sm:w-screen"></section>
+	<section class="flex lg:flex-row flex-col">
+		<section :id="TRADING_VIEW_ID" class="w-screen h-screen lg:w-5/6 xl:w-11/12"></section>
 		<OrderBook />
-	</div>
+	</section>
 </template>
 
-<style>
-#vue-trading-view {
-	width: calc(100% - 200px);
-	height: 100vh !important;
-}
-</style>
