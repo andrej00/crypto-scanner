@@ -1,6 +1,12 @@
 <script setup lang='ts'>
 import { ref } from 'vue'
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
+import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
+// import {
+// 	getAuth,
+// 	createUserWithEmailAndPassword,
+// 	GoogleAuthProvider,
+// 	signInWithPopup,
+// } from "firebase/auth"
 import router from '@/router'
 
 const email = ref('johndoe@gmail.com')
@@ -29,14 +35,24 @@ const signIn = async () => {
 		alert(errorMessage.value)
 	}
 }
+
+const signInWithGoogle = async () => {
+	const provider = new GoogleAuthProvider()
+	try {
+		await signInWithPopup(getAuth(), provider)
+		router.push({ name: "tickers" })
+	} catch (error) {
+		console.log(error)
+	}
+}
 </script>
 
 <template>
-    <section class="wrapper">
+    <section class="form-wrapper">
         <div class="max-w-md w-full">
             <div>
                 <h2 class="mt-6 text-center text-3xl font-extrabold text-slate-300">
-                Sign In
+                	Sign In
                 </h2>
             </div>
             <div class="mt-8 space-y-6">
@@ -60,27 +76,15 @@ const signIn = async () => {
 						placeholder="Password"
 					/>
                 </div>
-                <button type="submit" @click="signIn" class="sign-up-button">
-                    Sign in
-                </button>
+				<div class="flex">
+                    <button type="submit" @click="signIn" class="sign-up-button mr-5">
+                        Sign in
+                    </button>
+                    <button @click="signInWithGoogle" class="sign-up-button">
+                        Sign in With Google
+                    </button>
+                </div>
             </div>
         </div>
     </section>
 </template>
-
-<style scoped>
-.input-form {
-	@apply appearance-none relative block w-full px-3 py-2 border border-gray-300
-	placeholder-gray-900 text-gray-900 rounded-md mb-5 focus:outline-none focus:ring-indigo-500
-	focus:border-indigo-500 focus:z-10 sm:text-sm bg-slate-200
-}
-.sign-up-button {
-	@apply relative w-full flex justify-center py-2 px-4 border border-transparent text-sm
-	font-medium rounded-md text-slate-200 bg-indigo-600 hover:bg-indigo-700 focus:outline-none
-	focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
-}
-
-.wrapper {
-	@apply flex mt-36 items-center justify-center pb-20 px-4 sm:px-6 lg:px-12
-}
-</style>

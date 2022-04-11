@@ -1,5 +1,5 @@
-import { getAuth, onAuthStateChanged } from "@firebase/auth";
-import { createRouter, createWebHistory } from "vue-router";
+import { getAuth, onAuthStateChanged } from "@firebase/auth"
+import { createRouter, createWebHistory } from "vue-router"
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
@@ -7,7 +7,7 @@ const router = createRouter({
 		{
 			path: "/",
 			name: "home",
-			component: () => import("../views/HomeView.vue"),
+			component: () => import("@/views/Home.vue"),
 		},
 		{
 			path: "/sign-up",
@@ -44,8 +44,8 @@ const getCurrentUser = () => {
 		const removeListener = onAuthStateChanged(
 		getAuth(),
 		(user) => {
-			removeListener();
-			resolve(user);
+			removeListener()
+			resolve(user)
 		},
 			reject
 		);
@@ -55,13 +55,14 @@ const getCurrentUser = () => {
 router.beforeEach(async (to, from, next) => {
 	if (to.matched.some((record) => record.meta.requiresAuth)) {
 		if (await getCurrentUser()) {
-			next();
+			next()
 		} else {
-			alert("YOU DON'T HAVE ACCESS!");
-			next({ name: "home" });
+			alert("YOU DON'T HAVE ACCESS!")
+			next({ name: "home" })
 		}
 	} else {
-		next();
+		next()
 	}
-});
-export default router;
+})
+
+export default router

@@ -1,17 +1,7 @@
 import { defineStore } from "pinia";
 import axios from "axios";
 
-type TickerInfo = {
-	e?: string
-	E?: number
-	s?: string
-	U?: number
-	u?: number
-	b?: Array<string>
-	a?: Array<string>
-}
-
-type CoinsList = {
+interface CoinsList {
 	e: string
 	E: number
 	s: string
@@ -38,6 +28,16 @@ type CoinsList = {
 	history: Array<number>
 	token: string
 	asset: string
+}
+
+type TickerInfo = {
+	e?: string
+	E?: number
+	s?: string
+	U?: number
+	u?: number
+	b?: Array<string>
+	a?: Array<string>
 }
 
 type DepthSnapshot = {
@@ -170,8 +170,8 @@ export const useBinanceStore = defineStore("binance_socket", {
 		},
 
 		updateDepthSnapshot(depth: string, ticker: string) {
-			if (this.tickerInfo[ticker] !== undefined) {
-				this.tickerInfo[ticker].map((price: any) => {
+			if (this.tickerInfo[ticker as keyof TickerInfo] !== undefined) {
+				this.tickerInfo[ticker as keyof TickerInfo].map((price: any) => {
 					this.depthSnapshot[depth] = this.depthSnapshot[depth].filter(
 					(price2: any) => {
 						if (price2[0] !== price[0]) {

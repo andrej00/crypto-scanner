@@ -1,11 +1,11 @@
 import { describe, it, expect } from 'vitest'
 
 import { mount } from '@vue/test-utils'
-import HelloWorld from '../HelloWorld.vue'
+import TheNavbar from '../TheNavbar.vue'
 
-describe('HelloWorld', () => {
+describe('TheNavbar', () => {
 	it('renders properly', () => {
-		const wrapper = mount(HelloWorld, { props: { msg: 'Hello Vitest' } })
+		const wrapper = mount(TheNavbar, { props: { msg: 'Hello Vitest' } })
 		expect(wrapper.text()).toContain('Hello Vitest')
 	});
 });

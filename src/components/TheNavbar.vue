@@ -28,23 +28,23 @@ const handleSignout = async () => {
 <template>
 	<nav>
 		<div class="flex justify-end items-center align-middle lg:m-7 my-6  mr-9">
-		<router-link :to="{ name: 'home' }" class="nav-link">Home</router-link>
-		<div v-if="!isLoggedIn">
-			<router-link :to="{ name: 'sign-in' }" class="nav-link">
-				Sign in
-			</router-link>
-			<router-link :to="{ name: 'sign-up' }" class="sign-up-link">
-				Sign up
-			</router-link>
-		</div>
-		<div v-else>
-			<router-link :to="{ name: 'tickers' }" class="nav-link">
-				Tickers
-			</router-link>
-			<span @click="handleSignout" class="nav-link cursor-pointer">
-				Sign out
-			</span>
-		</div>
+			<router-link :to="{ name: 'home' }" class="nav-link">Home</router-link>
+			<div v-if="!isLoggedIn">
+				<router-link :to="{ name: 'sign-in' }" class="nav-link">
+					Sign in
+				</router-link>
+				<router-link :to="{ name: 'sign-up' }" class="sign-up-link">
+					Sign up
+				</router-link>
+			</div>
+			<div v-else>
+				<router-link :to="{ name: 'tickers' }" class="nav-link">
+					Tickers
+				</router-link>
+				<span @click="handleSignout" class="nav-link cursor-pointer">
+					Sign out
+				</span>
+			</div>
 		</div>
 	</nav>
 </template>
