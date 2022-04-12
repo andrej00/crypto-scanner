@@ -1,9 +1,8 @@
-<script lang="ts" setup>
+<script setup lang="ts">
 import SearchIcon from '@/components/icons/SearchIcon.vue'
 import { computed } from 'vue'
 
 const props = defineProps(['search'])
-const normalizedSize = computed(() => props.search.toUpperCase()
 </script>
 
 <template>

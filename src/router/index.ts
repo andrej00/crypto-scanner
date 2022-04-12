@@ -7,22 +7,26 @@ const router = createRouter({
 		{
 			path: "/",
 			name: "home",
-			component: () => import("@/views/Home.vue"),
+			// @ts-ignore
+			component: () => import("@/views/HomeView.vue"),
 		},
 		{
 			path: "/sign-up",
 			name: "sign-up",
-			component: () => import("../views/SignUp.vue"),
+			// @ts-ignore
+			component: () => import("@/views/SignUp.vue"),
 		},
 		{
 			path: "/sign-in",
 			name: "sign-in",
-			component: () => import("../views/SignIn.vue"),
+			// @ts-ignore
+			component: () => import("@/views/SignIn.vue"),
 		},
 		{
 			path: "/tickers",
 			name: "tickers",
-			component: () => import("../views/Tickers.vue"),
+			// @ts-ignore
+			component: () => import("@/views/Tickers.vue"),
 			meta: {
 				requiresAuth: true,
 			},
@@ -30,7 +34,8 @@ const router = createRouter({
 		{
 			path: "/tickers/:id",
 			name: "ticker-chart",
-			component: () => import("../views/ChartView.vue"),
+			// @ts-ignore
+			component: () => import("@/views/ChartView.vue"),
 			meta: {
 				requiresAuth: true,
 				hideNavbar: true,

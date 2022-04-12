@@ -19,6 +19,7 @@ const {
 
 let search = ref('')
 const favoriteCoinsList = ref(['BTCUSDT', 'ETHUSDT', 'LTCUSDT'])
+// const favoriteCoinsList = ref([])
 
 const filteredCoinsList = computed(() => {
 	return getCoinsList.value.filter((coin) => {
@@ -46,15 +47,13 @@ onUnmounted(() => {
 	<section
 		v-else
 	>
-		<div class="flex justify-end lg:mr-7 mr-9">
-			<div class="mb-3 xl:w-96">
-				<div class="flex flex-wrap items-stretch w-full">
-					<input type="search" class="input-form" v-model="search" placeholder="Search" aria-label="Search" aria-describedby="button-addon2">
-					<button class="input-button" type="button" id="button-addon2">
+		<div class="flex justify-end">
+				<div class="flex w-screen sm:w-96 mx-4">
+					<input type="search" class="input-form" v-model="search" placeholder="Search">
+					<button class="input-button" type="button">
 						<SearchIcon />
 					</button>
 				</div>
-			</div>
 		</div>
 
 		<div
@@ -140,12 +139,6 @@ onUnmounted(() => {
 					:data="coin.history"
 					:percentage="coin.P"
 				/>
-				<button
-					class="border-2 text-sm border-indigo-200/60 text-indigo-200/60 flex m-auto my-3 px-2 py-0.5"
-					@click="router.push({name: 'ticker-chart', params: {id: coin.s}})"
-				>
-					CHART
-				</button>
 			</div>
 		</div> -->
 	</section>
@@ -153,10 +146,9 @@ onUnmounted(() => {
 
 <style scoped>
 .input-form {
-	@apply flex-auto block px-3 py-1.5 text-base font-normal
-	text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded-l
-	transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600
-	focus:outline-none
+	@apply flex-auto block px-3 py-1.5 text-base font-normal rounded-r-none focus:outline-none
+	text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 transition
+ 	ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600
 }
 .input-button {
 	@apply px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase

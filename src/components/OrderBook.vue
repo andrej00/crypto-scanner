@@ -29,7 +29,7 @@ const asks = computed(() => {
 	getDepthSnapshot.value.asks
 		?.slice(0, numberOfRows.value)
 		.map((ask: any) => {
-			ask[2] = 10 + ((ask[1] - min.value) / (max.value - min.value)) * 90
+			ask[2] = (10 + ((ask[1] - min.value) / (max.value - min.value)) * 90).toString()
 		})
 	return getDepthSnapshot.value.asks
 		?.slice(0, numberOfRows.value)
@@ -42,7 +42,7 @@ const bids = computed(() => {
 	let quantity = getDepthSnapshot.value.bids
 		?.slice(0, numberOfRows.value)
 		.map((q) => q[1])
-		.sort((a: any, b: any) => a - b)
+		.sort((a: string, b: string) => parseFloat(a) - parseFloat(b))
 	if (quantity) {
 		min.value = parseFloat(quantity[0])
 		max.value = parseFloat(quantity[numberOfRows.value - 1])
@@ -50,7 +50,7 @@ const bids = computed(() => {
 	getDepthSnapshot.value.bids
 		?.slice(0, numberOfRows.value)
 		.map((bid: any) => {
-			bid[2] = 10 + ((bid[1] - min.value) / (max.value - min.value)) * 90
+			bid[2] = (10 + ((bid[1] - min.value) / (max.value - min.value)) * 90).toString()
 		})
 	return getDepthSnapshot.value.bids
 		?.slice(0, numberOfRows.value)

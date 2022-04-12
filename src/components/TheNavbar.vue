@@ -6,10 +6,11 @@ import { useRouter } from "vue-router"
 const router = useRouter()
 
 const isLoggedIn = ref(false)
-let auth
+let auth: any
 
 onMounted(() => {
 	auth = getAuth()
+	console.log(auth)
 	onAuthStateChanged(auth, (user) => {
 		if (user) {
 			isLoggedIn.value = true
@@ -27,7 +28,7 @@ const handleSignout = async () => {
 
 <template>
 	<nav>
-		<div class="flex justify-end items-center align-middle lg:m-7 my-6  mr-9">
+		<div class="flex justify-end items-center align-middle mr-4 my-7">
 			<router-link :to="{ name: 'home' }" class="nav-link">Home</router-link>
 			<div v-if="!isLoggedIn">
 				<router-link :to="{ name: 'sign-in' }" class="nav-link">

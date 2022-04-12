@@ -1,8 +1,13 @@
+<script lang="ts">
+declare global {
+	interface Window {
+		TradingView: any
+	}
+}
+</script>
 <script setup lang='ts'>
 import OrderBook from '@/components/OrderBook.vue'
 import { useRoute } from "vue-router"
-
-declare const window: any
 
 const route = useRoute()
 const ticker = route.params.id
