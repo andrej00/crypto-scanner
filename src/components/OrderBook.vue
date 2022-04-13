@@ -2,7 +2,7 @@
 import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
-import { useBinanceStore } from '@/stores/binance_socket'
+import { useBinanceStore } from '@/stores/binanceStore'
 
 const route = useRoute()
 const binanceStore = useBinanceStore()

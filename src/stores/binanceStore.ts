@@ -1,7 +1,7 @@
 import { defineStore } from "pinia"
 import axios from "axios"
 
-export const useBinanceStore = defineStore("binance_socket", {
+export const useBinanceStore = defineStore("binanceStore", {
 	state: () => ({
 		socketConnection: new WebSocket('wss://stream.binance.com:9443/ws/!ticker@arr') as WebSocket,
 		socketSingleTicker: new WebSocket(`wss://stream.binance.us:9443/ws/BTCUSDT@depth`) as WebSocket,
@@ -107,99 +107,53 @@ export const useBinanceStore = defineStore("binance_socket", {
 			if (this.prevTickerInfo.u && (this.tickerInfo.U === this.prevTickerInfo.u + 1)) {
 				this.updateDepthSnapshotAsks()
 				this.updateDepthSnapshotBids()
-				// this.updateDepthSnapshot("asks", "a")
-				// this.updateDepthSnapshot("bids", "b")
 			}
 		},
 
 		updateDepthSnapshotAsks() {
-			if (this.tickerInfo.a !== undefined) {
-				this.tickerInfo.a.map((price: string) => {
-					this.depthSnapshot.asks = this.depthSnapshot.asks ? this.depthSnapshot.asks.filter(
-						(price2: Array<string>) => {
-							if (price2[0] !== price[0]) {
-								return price2
-							}
-						}
-					) : this.depthSnapshot.asks
+			this.tickerInfo.a.map((tickerAsk) => {
+				this.depthSnapshot.asks = this.depthSnapshot.asks.filter((depthAsk) => {
+					if (depthAsk[0] !== tickerAsk[0]) {
+						return depthAsk
+					}
 				})
+			})
 
-				this.depthSnapshot.asks = this.depthSnapshot.asks ? this.depthSnapshot.asks
-					.concat(this.tickerInfo.a) : this.depthSnapshot.bids
+			this.depthSnapshot.asks = this.depthSnapshot.asks.concat(this.tickerInfo.a)
 
-				this.tickerInfo.a.map((price: string) => {
-					this.depthSnapshot.asks = this.depthSnapshot.asks ? this.depthSnapshot.asks.filter(
-						(price2: Array<string>) => {
-							if (price2["1"] !== "0.00000000") {
-								return price
-							}
-						}
-					) : this.depthSnapshot.bids
+			this.tickerInfo.a.map((tickerAsk) => {
+				this.depthSnapshot.asks = this.depthSnapshot.asks.filter((depthAsk) => {
+					if (depthAsk[1] !== "0.00000000") {
+						return tickerAsk
+					}
 				})
-				this.depthSnapshot.asks = this.depthSnapshot.asks ? this.depthSnapshot.asks
-					.sort((a: Array<string>, b: Array<string>) => parseFloat(a[0]) - parseFloat(b[0]))
-					.splice(0, 60) : this.depthSnapshot.asks
-			}
+			})
+			this.depthSnapshot.asks = this.depthSnapshot.asks ? this.depthSnapshot.asks
+				.sort((a, b) => parseFloat(a[0]) - parseFloat(b[0]))
+				.splice(0, 60) : this.depthSnapshot.asks
 		},
 
 		updateDepthSnapshotBids() {
-			if (this.tickerInfo.b !== undefined) {
-				this.tickerInfo.b.map((price: string) => {
-					this.depthSnapshot.bids = this.depthSnapshot.bids ? this.depthSnapshot.bids.filter(
-						(price2: Array<string>) => {
-							if (price2[0] !== price[0]) {
-								return price2
-							}
-						}
-					) : []
+			this.tickerInfo.b.map((tickerAsk) => {
+				this.depthSnapshot.bids = this.depthSnapshot.bids.filter((depthAsk) => {
+					if (depthAsk[0] !== tickerAsk[0]) {
+						return depthAsk
+					}
 				})
+			})
 
-				this.depthSnapshot.bids = this.depthSnapshot.bids ? this.depthSnapshot.bids
-					.concat(this.tickerInfo.b) : this.depthSnapshot.bids
+			this.depthSnapshot.bids = this.depthSnapshot.bids.concat(this.tickerInfo.b)
 
-				this.tickerInfo.b.map((price) => {
-					this.depthSnapshot.bids = this.depthSnapshot.bids ? this.depthSnapshot.bids.filter(
-						(price2: Array<string>) => {
-							if (price2["1"] !== "0.00000000") {
-								return price
-							}
-						}
-					) : this.depthSnapshot.bids
+			this.tickerInfo.b.map((tickerAsk) => {
+				this.depthSnapshot.bids = this.depthSnapshot.bids.filter((depthAsk) => {
+					if (depthAsk[1] !== "0.00000000") {
+						return tickerAsk
+					}
 				})
-				this.depthSnapshot.bids = this.depthSnapshot.bids ? this.depthSnapshot.bids
-					.sort((a: Array<string>, b: Array<string>) => parseFloat(a[0]) - parseFloat(b[0]))
-					.splice(0, 60) : this.depthSnapshot.bids
-			}
-		},
-
-		// updateDepthSnapshot(depth: string, ticker: string) {
-		// 	if (this.tickerInfo[ticker as keyof TickerInfo] !== undefined) {
-		// 		this.tickerInfo[ticker].map((price: any) => {
-		// 			this.depthSnapshot[depth] = this.depthSnapshot[depth].filter(
-		// 			(price2: any) => {
-		// 				if (price2[0] !== price[0]) {
-		// 				return price2
-		// 				}
-		// 			}
-		// 			)
-		// 		})
-		// 	}
-
-		// 	this.depthSnapshot[depth] = this.depthSnapshot[depth].concat(
-		// 		this.tickerInfo[ticker]
-		// 	)
-		// 	this.tickerInfo[ticker].map((price) => {
-		// 		this.depthSnapshot[depth] = this.depthSnapshot[depth].filter(
-		// 			(price2: any) => {
-		// 				if (price2["1"] !== "0.00000000") {
-		// 				return price
-		// 				}
-		// 			}
-		// 		)
-		// 	})
-		// 	this.depthSnapshot[depth] = this.depthSnapshot[depth]
-		// 		.sort((a: Array<number>, b: Array<number>) => a[0] - b[0])
-		// 		.splice(0, 60)
-		// },
-	},
+			})
+			this.depthSnapshot.bids = this.depthSnapshot.bids
+				.sort((a, b) => parseFloat(a[0]) - parseFloat(b[0]))
+				.splice(0, 60)
+		}
+	}
 })
