@@ -50,9 +50,3 @@ appendScript(initWidget)
 		<OrderBook />
 	</section>
 </template>
-
-<!-- <style>
-#app {
-	@apply h-screen
-}
-</style> -->

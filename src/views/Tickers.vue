@@ -3,19 +3,24 @@ import LineChart from '@/components/LineChart.vue'
 import PageLoader from '@/components/PageLoader.vue'
 import SearchIcon from '@/components/icons/SearchIcon.vue'
 
-import { onUnmounted, ref, computed, toRefs } from 'vue'
+import { onUnmounted, ref, computed, toRefs, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useBinanceStore } from '@/stores/binance_socket'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
 const binanceStore = useBinanceStore()
-binanceStore.connectToBinanceStream()
 
 const {
 	getCoinsList,
 	getBinanceStreamLoader,
 } = storeToRefs(binanceStore)
+
+onMounted(async () => {
+	if (!getCoinsList.value[0]) {
+		await binanceStore.connectToBinanceStream()
+	}
+})
 
 let search = ref('')
 const favoriteCoinsList = ref(['BTCUSDT', 'ETHUSDT', 'LTCUSDT'])
@@ -34,10 +39,6 @@ const favoriteCoins = computed(() => {
 const getCoinImage = (token: string) => {	
 	return `https://raw.githubusercontent.com/rainner/binance-watch/master/public/images/icons/${token.toLowerCase()}_.png`
 }
-
-// onUnmounted(() => {
-// 	binanceStore.disconnectBinanceStream()
-// })
 </script>
 
 <template>
@@ -105,13 +106,6 @@ const getCoinImage = (token: string) => {
 						:percentage="coin.P"
 					/>
 				</div>
-
-				<!-- <button
-					class="border-2 text-sm border-indigo-200/60 text-indigo-200/60 flex m-auto my-3 px-2 py-0.5"
-					@click="router.push({name: 'ticker-chart', params: {id: coin.s}})"
-				>
-					CHART
-				</button> -->
 			</div>
 		</div>
 

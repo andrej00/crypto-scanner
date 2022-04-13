@@ -10,7 +10,7 @@ export const useBinanceStore = defineStore("binance_socket", {
 		tickerInfo: {} as TickerInfo,
 		prevTickerInfo: {} as TickerInfo,
 		depthSnapshot: {} as DepthSnapshot,
-		binanceStreamLoader: false as boolean,
+		binanceStreamLoader: true as boolean,
 	}),
 	getters: {
 		getCoinsList: (state) => state.coinsList,
@@ -67,13 +67,13 @@ export const useBinanceStore = defineStore("binance_socket", {
 			return out
 		  },
 
-		disconnectBinanceStream() {
-			this.socketConnection.send({
-				method: "UNSUBSCRIBE",
-				params: ["ticker@arr"],
-				id: 312,
-			})
-		},
+		// disconnectBinanceStream() {
+		// 	this.socketConnection.send({
+		// 		method: "UNSUBSCRIBE",
+		// 		params: ["ticker@arr"],
+		// 		id: 312,
+		// 	})
+		// },
 
 		connectToTickerStream(symbol: string) {
 			this.socketSingleTicker = new WebSocket(`wss://stream.binance.us:9443/ws/${symbol}@depth`)

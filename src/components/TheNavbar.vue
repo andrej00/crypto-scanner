@@ -10,7 +10,6 @@ let auth: any
 
 onMounted(() => {
 	auth = getAuth()
-	console.log(auth)
 	onAuthStateChanged(auth, (user) => {
 		if (user) {
 			isLoggedIn.value = true

@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-import { onMounted, ref, watchEffect, defineProps, onBeforeUnmount, reactive } from 'vue'
+import { onMounted, ref, watchEffect, onBeforeUnmount, reactive } from 'vue'
 import * as d3 from 'd3'
 
 const props = defineProps<{
