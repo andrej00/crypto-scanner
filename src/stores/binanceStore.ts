@@ -20,8 +20,6 @@ export const useBinanceStore = defineStore("binanceStore", {
 	},
 	actions: {
 		connectToBinanceStream() {
-			this.binanceStreamLoader = true
-
 			console.log("Connecting to BinanceStream")
 
 			this.socketConnection = new WebSocket(
@@ -77,15 +75,12 @@ export const useBinanceStore = defineStore("binanceStore", {
 
 		connectToTickerStream(symbol: string) {
 			this.socketSingleTicker = new WebSocket(`wss://stream.binance.us:9443/ws/${symbol}@depth`)
-			let dalje = true
 
 			this.socketSingleTicker!.onmessage = (event: any) => {
 				const data = JSON.parse(event.data) || []
 
-				if (dalje === true) {
+				if (!this.prevTickerInfo) {
 					this.prevTickerInfo = data
-					dalje = false
-					return
 				}
 				this.tickerInfo = data
 				this.setTickerInfo()
