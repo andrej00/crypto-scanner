@@ -51,3 +51,8 @@ appendScript(initWidget)
 	</section>
 </template>
 
+<!-- <style>
+#app {
+	@apply h-screen
+}
+</style> -->

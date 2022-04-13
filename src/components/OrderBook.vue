@@ -86,9 +86,9 @@ const bids = computed(() => {
 
 <style>
 #app {
-	@apply h-screen
+	@apply h-screen overflow-hidden
 }
 .order-book {
-	@apply m-auto flex flex-row lg:flex-col w-screen lg:w-1/6 justify-center
+	@apply m-auto flex flex-row lg:flex-col w-screen lg:w-1/6 justify-center overflow-auto h-screen
 }
 </style>

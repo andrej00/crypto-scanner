@@ -2,7 +2,10 @@
 import { onMounted, ref, watchEffect, defineProps, onBeforeUnmount, reactive } from 'vue'
 import * as d3 from 'd3'
 
-const props = defineProps(['data', 'percentage'])
+const props = defineProps<{
+	data: Array<number>,
+	percentage: string
+}>()
 const svgRef = ref(null)
 const resizeRef = ref()
 const resizeState = reactive({

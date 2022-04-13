@@ -1,66 +1,12 @@
 import { defineStore } from "pinia"
 import axios from "axios"
 
-interface CoinsList {
-	e: string
-	E: number
-	s: string
-	p: string
-	P: string
-	w: string
-	x: string
-	c: string
-	Q: string
-	b: string
-	B: string
-	a: string
-	A: string
-	o: string
-	h: string
-	l: string
-	v: string
-	q: string
-	O: number
-	C: number
-	F: number
-	L: number
-	n: number
-	history: Array<number>
-	token: string
-	asset: string
-}
-
-type TickerInfo = {
-	e: string
-	E: number
-	s: string
-	U: number
-	u: number
-	a: string[]
-	b: string[]
-}
-
-type DepthSnapshot = {
-	lastUpdateId: number
-	asks: string[][]
-	bids: string[][]
-}
-
-// interface IUserState {
-// 	socketConnection: WebSocket
-// 	socketSingleTicker: WebSocket
-// 	coinsList: Array<CoinsList>
-// 	tickerInfo: TickerInfo
-// 	prevTickerInfo: Partial<TickerInfo>
-// 	depthSnapshot: Partial<DepthSnapshot>
-// 	binanceStreamLoader: boolean
-// }
-
 export const useBinanceStore = defineStore("binance_socket", {
 	state: () => ({
 		socketConnection: new WebSocket('wss://stream.binance.com:9443/ws/!ticker@arr') as WebSocket,
 		socketSingleTicker: new WebSocket(`wss://stream.binance.us:9443/ws/BTCUSDT@depth`) as WebSocket,
-		coinsList: Array<CoinsList>(),
+		coinsList: {} as CoinsList[],
+		coinsListCache: {} as CoinsListCache,
 		tickerInfo: {} as TickerInfo,
 		prevTickerInfo: {} as TickerInfo,
 		depthSnapshot: {} as DepthSnapshot,
@@ -74,7 +20,6 @@ export const useBinanceStore = defineStore("binance_socket", {
 	},
 	actions: {
 		connectToBinanceStream() {
-			console.log('fewpohifewpohfew')
 			this.binanceStreamLoader = true
 
 			console.log("Connecting to BinanceStream")
@@ -86,26 +31,22 @@ export const useBinanceStore = defineStore("binance_socket", {
 				console.log("Connected to BinanceStream")
 			}
 
-			const cache: Partial<CoinsList> = {}
-
-			this.socketConnection!.onmessage = (event: any) => {
-				const list = JSON.parse(event.data) || []
+			this.socketConnection!.onmessage = ({data}) => {
+				const list = JSON.parse(data) || []
 				list.forEach((ticker: CoinsList) => {
-					console.log(ticker)
 					let close = parseFloat(ticker.c)
-					ticker.history = (cache && cache.hasOwnProperty(ticker.s)) ? cache[ticker.s as keyof CoinsList].history : this.fakeHistory(close)
+					ticker.history = (this.coinsListCache && this.coinsListCache.hasOwnProperty(ticker.s)) ? this.coinsListCache[ticker.s as keyof CoinsList].history : this.fakeHistory(close)
 					if (ticker.history.length > 20) { 
 						ticker.history = ticker.history.slice(ticker.history.length - 20)
 					}
 					let reg         = /^([A-Z]+)(BTC|ETH|BNB|USDT|TUSD)$/
-					let symbol      = String( ticker.s ).replace( /[^\w\-]+/g, '' ).toUpperCase()
+					let symbol      = String(ticker.s).replace(/[^\w\-]+/g, '').toUpperCase()
 					ticker.token    = symbol.replace( reg, '$1' )
 					ticker.asset    = symbol.replace( reg, '$2' )
 					ticker.history.push(close)
-					cache[ticker.s] = ticker
-					// console.log(cache)
+					this.coinsListCache[ticker.s] = ticker
 				})
-				this.coinsList = Object.keys(cache).map((s) => cache[s])
+				this.coinsList = Object.keys(this.coinsListCache).map((s) => this.coinsListCache[s])
 				this.binanceStreamLoader = false
 			}
 			this.socketConnection!.onclose = () => {
@@ -173,9 +114,9 @@ export const useBinanceStore = defineStore("binance_socket", {
 
 		updateDepthSnapshotAsks() {
 			if (this.tickerInfo.a !== undefined) {
-				this.tickerInfo.a.map((price: any) => {
+				this.tickerInfo.a.map((price: string) => {
 					this.depthSnapshot.asks = this.depthSnapshot.asks ? this.depthSnapshot.asks.filter(
-						(price2: any) => {
+						(price2: Array<string>) => {
 							if (price2[0] !== price[0]) {
 								return price2
 							}
@@ -183,12 +124,12 @@ export const useBinanceStore = defineStore("binance_socket", {
 					) : this.depthSnapshot.asks
 				})
 
-				this.depthSnapshot.asks = this.depthSnapshot.asks ? this.depthSnapshot.asks.concat(
-					this.tickerInfo.a
-				) : this.depthSnapshot.bids
-				this.tickerInfo.a.map((price) => {
+				this.depthSnapshot.asks = this.depthSnapshot.asks ? this.depthSnapshot.asks
+					.concat(this.tickerInfo.a) : this.depthSnapshot.bids
+
+				this.tickerInfo.a.map((price: string) => {
 					this.depthSnapshot.asks = this.depthSnapshot.asks ? this.depthSnapshot.asks.filter(
-						(price2: any) => {
+						(price2: Array<string>) => {
 							if (price2["1"] !== "0.00000000") {
 								return price
 							}
@@ -203,9 +144,9 @@ export const useBinanceStore = defineStore("binance_socket", {
 
 		updateDepthSnapshotBids() {
 			if (this.tickerInfo.b !== undefined) {
-				this.tickerInfo.b.map((price: any) => {
+				this.tickerInfo.b.map((price: string) => {
 					this.depthSnapshot.bids = this.depthSnapshot.bids ? this.depthSnapshot.bids.filter(
-						(price2: any) => {
+						(price2: Array<string>) => {
 							if (price2[0] !== price[0]) {
 								return price2
 							}
@@ -213,12 +154,12 @@ export const useBinanceStore = defineStore("binance_socket", {
 					) : []
 				})
 
-				this.depthSnapshot.bids = this.depthSnapshot.bids ? this.depthSnapshot.bids.concat(
-					this.tickerInfo.b
-				) : this.depthSnapshot.bids
+				this.depthSnapshot.bids = this.depthSnapshot.bids ? this.depthSnapshot.bids
+					.concat(this.tickerInfo.b) : this.depthSnapshot.bids
+
 				this.tickerInfo.b.map((price) => {
 					this.depthSnapshot.bids = this.depthSnapshot.bids ? this.depthSnapshot.bids.filter(
-						(price2: any) => {
+						(price2: Array<string>) => {
 							if (price2["1"] !== "0.00000000") {
 								return price
 							}

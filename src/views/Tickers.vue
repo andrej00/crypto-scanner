@@ -35,9 +35,9 @@ const getCoinImage = (token: string) => {
 	return `https://raw.githubusercontent.com/rainner/binance-watch/master/public/images/icons/${token.toLowerCase()}_.png`
 }
 
-onUnmounted(() => {
-	binanceStore.disconnectBinanceStream()
-})
+// onUnmounted(() => {
+// 	binanceStore.disconnectBinanceStream()
+// })
 </script>
 
 <template>
