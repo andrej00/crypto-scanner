@@ -7,7 +7,7 @@ import { useBinanceStore } from "@/stores/binanceStore";
 const route = useRoute();
 const binanceStore = useBinanceStore();
 
-const ticker: string = route.params.id as string;
+const ticker = route.params.id as string;
 const numberOfRows = ref(15);
 
 binanceStore.connectToTickerStream(ticker.toLowerCase());
@@ -21,13 +21,13 @@ const asks = computed(() => {
     let quantity = getDepthSnapshot.value.asks
         ?.slice(0, numberOfRows.value)
         .map((q) => q[1])
-        .sort((a: string, b: string) => parseFloat(a) - parseFloat(b));
+        .sort((a: string, b: string) => Number(a) - Number(b));
     if (quantity) {
-        min.value = parseFloat(quantity[0]);
-        max.value = parseFloat(quantity[numberOfRows.value - 1]);
+        min.value = Number(quantity[0]);
+        max.value = Number(quantity[numberOfRows.value - 1]);
     }
-    getDepthSnapshot.value.asks?.slice(0, numberOfRows.value).map((ask: any) => {
-        ask[2] = (10 + ((ask[1] - min.value) / (max.value - min.value)) * 90).toString();
+    getDepthSnapshot.value.asks?.slice(0, numberOfRows.value).map((ask: string[]) => {
+        ask[2] = (10 + ((Number(ask[1]) - min.value) / (max.value - min.value)) * 90).toString();
     });
     return getDepthSnapshot.value.asks?.slice(0, numberOfRows.value).reverse();
 });
@@ -38,15 +38,15 @@ const bids = computed(() => {
     let quantity = getDepthSnapshot.value.bids
         ?.slice(0, numberOfRows.value)
         .map((q) => q[1])
-        .sort((a: string, b: string) => parseFloat(a) - parseFloat(b));
+        .sort((a: string, b: string) => Number(a) - Number(b));
     if (quantity) {
-        min.value = parseFloat(quantity[0]);
-        max.value = parseFloat(quantity[numberOfRows.value - 1]);
+        min.value = Number(quantity[0]);
+        max.value = Number(quantity[numberOfRows.value - 1]);
     }
-    getDepthSnapshot.value.bids?.slice(0, numberOfRows.value).map((bid: any) => {
-        bid[2] = (10 + ((bid[1] - min.value) / (max.value - min.value)) * 90).toString();
+    getDepthSnapshot.value.bids?.slice(0, numberOfRows.value).map((bid: string[]) => {
+        bid[2] = (10 + ((Number(bid[1]) - min.value) / (max.value - min.value)) * 90).toString();
     });
-    return getDepthSnapshot.value.bids?.slice(0, numberOfRows.value).reverse();
+    return getDepthSnapshot.value.bids?.slice(0, numberOfRows.value);
 });
 </script>
 
@@ -59,7 +59,7 @@ const bids = computed(() => {
                 :key="ask[0]"
                 :style="`background-image: -webkit-linear-gradient(right, rgb(50, 205, 50, 0.25), rgb(50, 205, 50, 0.25) ${ask[2]}%, transparent ${ask[2]}%)`"
             >
-                <span class="text-slate-300">{{ parseFloat(ask[0]) }}</span> |
+                <span class="text-slate-300">{{ Number(ask[0]) }}</span> |
                 {{ ask[1] }}
             </p>
         </div>
@@ -71,7 +71,7 @@ const bids = computed(() => {
                 :key="bid[0]"
                 :style="`background-image: -webkit-linear-gradient(right, rgb(255, 69, 0, 0.25), rgb(255, 69, 0, 0.25) ${bid[2]}%, transparent ${bid[2]}%)`"
             >
-                <span class="text-slate-300">{{ parseFloat(bid[0]) }}</span> |
+                <span class="text-slate-300">{{ Number(bid[0]) }}</span> |
                 {{ bid[1] }}
             </p>
         </div>

@@ -25,21 +25,21 @@ const getCoinImage = (token: string) => {
             <div class="flex p-4 border-solid border-b-2 border-gray-800">
                 <img :src="getCoinImage(coin.token)" class="w-16 mr-4" :alt="coin.token" />
                 <div>
-                    <p class="text-xl pb-1" :class="[parseFloat(coin.P) > 0 ? 'text-green-400' : 'text-red-600']">
+                    <p class="text-xl pb-1" :class="[Number(coin.P) > 0 ? 'text-green-400' : 'text-red-600']">
                         <span class="font-bold text-2xl">{{ coin.token }}</span>
                         / {{ coin.asset }}
                     </p>
-                    <p class="text-lg" :class="[parseFloat(coin.P) > 0 ? 'text-green-400' : 'text-red-600']">
-                        {{ parseFloat(coin.c) }}
+                    <p class="text-lg" :class="[Number(coin.P) > 0 ? 'text-green-400' : 'text-red-600']">
+                        {{ Number(coin.c) }}
                     </p>
                 </div>
 
                 <div class="ml-auto flex flex-col justify-around">
-                    <p class="text-lg text-right" :class="[parseFloat(coin.P) > 0 ? 'text-green-400' : 'text-red-600']">
+                    <p class="text-lg text-right" :class="[Number(coin.P) > 0 ? 'text-green-400' : 'text-red-600']">
                         <span class="pr-2">Vol:</span>
-                        {{ Math.round(parseFloat(coin.v)) }}
+                        {{ Math.round(Number(coin.v)) }}
                     </p>
-                    <p class="text-lg text-right" :class="[parseFloat(coin.P) > 0 ? 'text-green-400' : 'text-red-600']">
+                    <p class="text-lg text-right" :class="[Number(coin.P) > 0 ? 'text-green-400' : 'text-red-600']">
                         {{ coin.P }}%
                     </p>
                 </div>

@@ -25,7 +25,7 @@ const observer = new ResizeObserver((entries) => {
 });
 
 onMounted(() => {
-    const chartColor = parseFloat(props.percentage) > 0;
+    const chartColor = Number(props.percentage) > 0;
     resizeState.dimensions = resizeRef.value.getBoundingClientRect();
     observer.observe(resizeRef.value);
     const svg = d3.select(svgRef.value);

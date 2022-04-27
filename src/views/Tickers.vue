@@ -18,18 +18,18 @@ onMounted(async () => {
 });
 
 let search = ref("");
-const favoriteCoinsList = ref(["BTCUSDT", "ETHUSDT", "LTCUSDT"]);
+const coinsList = ref(["BTCUSDT", "ETHUSDT", "LTCUSDT"]);
 
-const filteredCoinsList = computed(() => {
-    return getCoinsList.value.filter((coin) => {
-        return coin.s.includes(search.value.toUpperCase());
-    });
-});
-const favoriteCoins = computed(() => {
-    return getCoinsList.value.filter((coin) => {
-        return favoriteCoinsList.value.includes(coin.s);
-    });
-});
+// const filteredCoinsList = computed(() => {
+//     return getCoinsList.value.filter((coin) => {
+//         return coin.s.includes(search.value.toUpperCase());
+//     });
+// });
+const favoriteCoins = computed(() =>
+    getCoinsList.value
+        .filter((coin) => coinsList.value.includes(coin.s))
+        .filter((filterCoin) => filterCoin.s.includes(search.value.toUpperCase()))
+);
 </script>
 
 <template>

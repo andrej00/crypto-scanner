@@ -20,7 +20,7 @@ const signUp = async () => {
         return;
     }
     try {
-        const data = await createUserWithEmailAndPassword(getAuth(), email.value, password.value);
+        await createUserWithEmailAndPassword(getAuth(), email.value, password.value);
         router.push({ name: "tickers" });
     } catch (error: any) {
         alert(error.code);
@@ -33,7 +33,7 @@ const signInWithGoogle = async () => {
         await signInWithPopup(getAuth(), provider);
         router.push({ name: "tickers" });
     } catch (error) {
-        console.log(error);
+        alert(error);
     }
 };
 </script>

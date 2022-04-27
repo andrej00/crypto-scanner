@@ -42,7 +42,7 @@ const signInWithGoogle = async () => {
         await signInWithPopup(getAuth(), provider);
         router.push({ name: "tickers" });
     } catch (error) {
-        console.log(error);
+        alert(error);
     }
 };
 </script>

@@ -30,7 +30,7 @@ export const useBinanceStore = defineStore("binanceStore", {
             this.socketConnection!.onmessage = ({ data }) => {
                 const list = JSON.parse(data) || [];
                 list.forEach((ticker: CoinsList) => {
-                    const close = parseFloat(ticker.c);
+                    const close = Number(ticker.c);
                     ticker.history =
                         this.coinsListCache && this.coinsListCache.hasOwnProperty(ticker.s)
                             ? this.coinsListCache[ticker.s as keyof CoinsList].history
@@ -40,7 +40,7 @@ export const useBinanceStore = defineStore("binanceStore", {
                     }
                     const reg = /^([A-Z]+)(BTC|ETH|BNB|USDT|TUSD)$/;
                     const symbol = String(ticker.s)
-                        .replace(/[^\w\-]+/g, "")
+                        .replace(/[^\w-]+/g, "")
                         .toUpperCase();
                     ticker.token = symbol.replace(reg, "$1");
                     ticker.asset = symbol.replace(reg, "$2");
@@ -131,7 +131,7 @@ export const useBinanceStore = defineStore("binanceStore", {
                 });
             });
             this.depthSnapshot.asks = this.depthSnapshot.asks
-                ? this.depthSnapshot.asks.sort((a, b) => parseFloat(a[0]) - parseFloat(b[0])).splice(0, 60)
+                ? this.depthSnapshot.asks.sort((a, b) => Number(a[0]) - Number(b[0])).splice(0, 60)
                 : this.depthSnapshot.asks;
         },
 
@@ -154,7 +154,8 @@ export const useBinanceStore = defineStore("binanceStore", {
                 });
             });
             this.depthSnapshot.bids = this.depthSnapshot.bids
-                .sort((a, b) => parseFloat(a[0]) - parseFloat(b[0]))
+                .sort((a, b) => Number(a[0]) - Number(b[0]))
+                .reverse()
                 .splice(0, 60);
         },
     },
