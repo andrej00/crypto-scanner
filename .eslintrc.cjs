@@ -13,6 +13,6 @@ module.exports = {
         "vue/setup-compiler-macros": true,
     },
     rules: {
-        "max-len": ["error", { code: 180 }],
+        noImplicitAny: 0,
     },
 };

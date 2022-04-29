@@ -1,16 +1,17 @@
 import { defineStore } from "pinia";
 import axios from "axios";
+import type { CoinsList, TickerInfo, DepthSnapshot, CoinsListCache } from "@/types/binance";
 
 export const useBinanceStore = defineStore("binanceStore", {
     state: () => ({
-        socketConnection: new WebSocket("wss://stream.binance.com:9443/ws/!ticker@arr") as WebSocket,
-        socketSingleTicker: new WebSocket(`wss://stream.binance.us:9443/ws/BTCUSDT@depth`) as WebSocket,
+        socketConnection: new WebSocket("wss://stream.binance.com:9443/ws/!ticker@arr"),
+        socketSingleTicker: new WebSocket(`wss://stream.binance.us:9443/ws/BTCUSDT@depth`),
         coinsList: {} as CoinsList[],
         coinsListCache: {} as CoinsListCache,
         tickerInfo: {} as TickerInfo,
         prevTickerInfo: {} as TickerInfo,
         depthSnapshot: {} as DepthSnapshot,
-        binanceStreamLoader: true as boolean,
+        binanceStreamLoader: true,
     }),
     getters: {
         getCoinsList: (state) => state.coinsList,

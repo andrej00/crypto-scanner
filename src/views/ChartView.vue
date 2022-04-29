@@ -1,6 +1,7 @@
 <script lang="ts">
 declare global {
     interface Window {
+        // eslint-disable-next-line
         TradingView: any;
     }
 }

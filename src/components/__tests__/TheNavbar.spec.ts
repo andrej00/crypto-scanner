@@ -1,11 +1,20 @@
-import { describe, it, expect } from 'vitest'
+import { describe, expect, it } from "vitest";
 
-import { mount } from '@vue/test-utils'
-import TheNavbar from '../TheNavbar.vue'
+const person = {
+    isActive: true,
+    age: 32,
+};
 
-describe('TheNavbar', () => {
-	it('renders properly', () => {
-		const wrapper = mount(TheNavbar, { props: { msg: 'Hello Vitest' } })
-		expect(wrapper.text()).toContain('Hello Vitest')
-	});
+describe("person", () => {
+    it("should be defined", () => {
+        expect(person).toBeDefined();
+    });
+
+    it("should be truthy", () => {
+        expect(person.isActive).toBeTruthy();
+    });
+
+    it("should be less than or equal", () => {
+        expect(person.age).toBeLessThanOrEqual(32);
+    });
 });

@@ -1,4 +1,4 @@
-interface CoinsList {
+export type CoinsList = {
     e: string;
     E: number;
     s: string;
@@ -25,9 +25,9 @@ interface CoinsList {
     history: number[];
     token: string;
     asset: string;
-}
+};
 
-type TickerInfo = {
+export type TickerInfo = {
     e: string;
     E: number;
     s: string;
@@ -37,12 +37,12 @@ type TickerInfo = {
     b: string[];
 };
 
-type DepthSnapshot = {
+export type DepthSnapshot = {
     lastUpdateId: number;
     asks: string[][];
     bids: string[][];
 };
 
-interface CoinsListCache {
+export interface CoinsListCache {
     [key: string]: CoinsList;
 }

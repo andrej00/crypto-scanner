@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import LineChart from "@/components/LineChart.vue";
+import type { CoinsList } from "@/types/binance";
 
 import { useRouter } from "vue-router";
 
-const props = defineProps<{
+defineProps<{
     coinsList: CoinsList[];
 }>();
 

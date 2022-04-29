@@ -1,12 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-// import {
-// 	getAuth,
-// 	createUserWithEmailAndPassword,
-// 	GoogleAuthProvider,
-// 	signInWithPopup,
-// } from "firebase/auth"
 import router from "@/router";
 
 const email = ref("johndoe@gmail.com");
@@ -23,13 +17,13 @@ const signIn = async () => {
                 errorMessage.value = "Invalid Email";
                 break;
             case "auth/user-not-found":
-                errorMessage.value = "No account with that email was found";
+                errorMessage.value = "No account with that email";
                 break;
             case "auth/wrong-password":
                 errorMessage.value = "Incorrect password";
                 break;
             default:
-                errorMessage.value = "Email or password was incorrect";
+                errorMessage.value = "Incorrect email or password";
                 break;
         }
         alert(errorMessage.value);

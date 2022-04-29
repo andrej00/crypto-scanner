@@ -5,17 +5,15 @@ import { useRouter } from "vue-router";
 
 const router = useRouter();
 
+const loadNavbar = ref(false);
 const isLoggedIn = ref(false);
 let auth: any;
 
 onMounted(() => {
     auth = getAuth();
     onAuthStateChanged(auth, (user) => {
-        if (user) {
-            isLoggedIn.value = true;
-        } else {
-            isLoggedIn.value = false;
-        }
+        isLoggedIn.value = !!user;
+        loadNavbar.value = true;
     });
 });
 
@@ -26,7 +24,7 @@ const handleSignout = async () => {
 </script>
 
 <template>
-    <nav>
+    <nav v-if="loadNavbar">
         <div class="flex justify-end items-center align-middle mr-4 my-7">
             <router-link :to="{ name: 'home' }" class="nav-link">Home</router-link>
             <div v-if="!isLoggedIn">
