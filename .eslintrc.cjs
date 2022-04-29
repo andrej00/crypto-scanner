@@ -12,7 +12,5 @@ module.exports = {
     env: {
         "vue/setup-compiler-macros": true,
     },
-    rules: {
-        noImplicitAny: 0,
-    },
+    rules: {},
 };

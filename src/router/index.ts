@@ -22,7 +22,7 @@ const router = createRouter({
         {
             path: "/tickers",
             name: "tickers",
-            component: () => import("@/views/Tickers.vue"),
+            component: () => import("@/views/TickersView.vue"),
             meta: {
                 requiresAuth: true,
             },

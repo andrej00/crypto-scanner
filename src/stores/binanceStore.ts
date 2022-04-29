@@ -28,12 +28,13 @@ export const useBinanceStore = defineStore("binanceStore", {
                 console.log("Connected to BinanceStream");
             };
 
-            this.socketConnection!.onmessage = ({ data }) => {
+            this.socketConnection.onmessage = ({ data }) => {
                 const list = JSON.parse(data) || [];
                 list.forEach((ticker: CoinsList) => {
                     const close = Number(ticker.c);
+                    const coinsListCacheHasTicker = Object.prototype.hasOwnProperty.call(this.coinsListCache, ticker.s);
                     ticker.history =
-                        this.coinsListCache && this.coinsListCache.hasOwnProperty(ticker.s)
+                        this.coinsListCache && coinsListCacheHasTicker
                             ? this.coinsListCache[ticker.s as keyof CoinsList].history
                             : this.fakeHistory(close);
                     if (ticker.history.length > 20) {
@@ -51,7 +52,7 @@ export const useBinanceStore = defineStore("binanceStore", {
                 this.coinsList = Object.keys(this.coinsListCache).map((s) => this.coinsListCache[s]);
                 this.binanceStreamLoader = false;
             };
-            this.socketConnection!.onclose = () => {
+            this.socketConnection.onclose = () => {
                 console.log("Closed connection to BinanceStream");
             };
         },
@@ -80,7 +81,7 @@ export const useBinanceStore = defineStore("binanceStore", {
         connectToTickerStream(symbol: string) {
             this.socketSingleTicker = new WebSocket(`wss://stream.binance.us:9443/ws/${symbol}@depth`);
 
-            this.socketSingleTicker!.onmessage = (event: any) => {
+            this.socketSingleTicker.onmessage = (event: any) => {
                 const data = JSON.parse(event.data) || [];
 
                 if (!this.prevTickerInfo) {
