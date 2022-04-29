@@ -2,9 +2,12 @@
 import { ref } from "vue";
 import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import router from "@/router";
+import HidePasswordIcon from "@/assets/icons/ShowPassword.vue";
+import ShowPasswordIcon from "@/assets/icons/HidePassword.vue";
 
 const email = ref("johndoe@gmail.com");
 const password = ref("password");
+const showPassword = ref(true);
 const errorMessage = ref();
 
 const signIn = async () => {
@@ -58,14 +61,24 @@ const signInWithGoogle = async () => {
                         placeholder="Email address"
                     />
                 </div>
-                <div>
+                <div class="relative">
                     <input
-                        type="password"
+                        :type="showPassword ? 'password' : 'text'"
                         v-model="password"
                         autocomplete="current-password"
                         required
                         class="input-form"
                         placeholder="Password"
+                    />
+                    <ShowPasswordIcon
+                        v-if="showPassword"
+                        class="absolute top-1/2 -translate-y-1/2 right-2 cursor-pointer"
+                        @click="showPassword = false"
+                    />
+                    <HidePasswordIcon
+                        v-else
+                        class="absolute top-1/2 -translate-y-1/2 right-2 cursor-pointer"
+                        @click="showPassword = true"
                     />
                 </div>
                 <div class="flex">

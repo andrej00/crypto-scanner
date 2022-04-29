@@ -2,10 +2,13 @@
 import { ref } from "vue";
 import { getAuth, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import router from "@/router";
+import HidePasswordIcon from "@/assets/icons/ShowPassword.vue";
+import ShowPasswordIcon from "@/assets/icons/HidePassword.vue";
 
 const email = ref("");
 const password = ref("");
 const repeatPassword = ref("");
+const showPassword = ref(true);
 
 const isPasswordEqual = () => {
     if (password.value === repeatPassword.value) {
@@ -57,24 +60,44 @@ const signInWithGoogle = async () => {
                             placeholder="Email address"
                         />
                     </div>
-                    <div>
+                    <div class="relative">
                         <input
-                            type="password"
+                            :type="showPassword ? 'password' : 'text'"
                             v-model="password"
                             autocomplete="current-password"
                             required
                             class="input-form"
                             placeholder="Password"
                         />
+                        <ShowPasswordIcon
+                            v-if="showPassword"
+                            class="absolute top-1/2 -translate-y-1/2 right-2 cursor-pointer"
+                            @click="showPassword = false"
+                        />
+                        <HidePasswordIcon
+                            v-else
+                            class="absolute top-1/2 -translate-y-1/2 right-2 cursor-pointer"
+                            @click="showPassword = true"
+                        />
                     </div>
-                    <div>
+                    <div class="relative">
                         <input
-                            type="password"
+                            :type="showPassword ? 'password' : 'text'"
                             v-model="repeatPassword"
                             autocomplete="repeat-password"
                             required
                             class="input-form"
                             placeholder="Repeat Password"
+                        />
+                        <ShowPasswordIcon
+                            v-if="showPassword"
+                            class="absolute top-1/2 -translate-y-1/2 right-2 cursor-pointer"
+                            @click="showPassword = false"
+                        />
+                        <HidePasswordIcon
+                            v-else
+                            class="absolute top-1/2 -translate-y-1/2 right-2 cursor-pointer"
+                            @click="showPassword = true"
                         />
                     </div>
                 </div>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import PageLoader from "@/components/PageLoader.vue";
+import PageLoader from "@/assets/icons/PageLoader.vue";
 import SearchIcon from "@/components/icons/SearchIcon.vue";
 import TickerGrid from "@/components/TickerGrid.vue";
 
@@ -18,7 +18,7 @@ onMounted(async () => {
 });
 
 let search = ref("");
-const coinsList = ref(["BTCUSDT", "ETHUSDT", "LTCUSDT"]);
+const coinsList = ref(["BTCUSDT", "ETHUSDT", "LTCUSDT", "XRPUSDT"]);
 
 // const filteredCoinsList = computed(() => {
 //     return getCoinsList.value.filter((coin) => {
