@@ -12,13 +12,13 @@ const binanceStore = useBinanceStore();
 const { getCoinsList, getBinanceStreamLoader } = storeToRefs(binanceStore);
 
 onMounted(async () => {
-    if (!getCoinsList.value[0]) {
+    if (!getCoinsList.value.length) {
         await binanceStore.connectToBinanceStream();
     }
 });
 
 let search = ref("");
-const coinsList = ref(["BTCUSDT", "ETHUSDT", "LTCUSDT", "XRPUSDT"]);
+const coinsList = ref(["BTCUSDT", "ETHUSDT", "LTCUSDT", "DOGEUSDT", "BNBUSDT"]);
 
 // const filteredCoinsList = computed(() => {
 //     return getCoinsList.value.filter((coin) => {
