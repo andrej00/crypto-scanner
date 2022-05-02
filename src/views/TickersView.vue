@@ -11,9 +11,9 @@ const binanceStore = useBinanceStore();
 
 const { getCoinsList, getBinanceStreamLoader } = storeToRefs(binanceStore);
 
-onMounted(async () => {
+onMounted(() => {
     if (!getCoinsList.value.length) {
-        await binanceStore.connectToBinanceStream();
+        binanceStore.connectToBinanceStream();
     }
 });
 

@@ -8,7 +8,7 @@ const router = useRouter();
 const loadNavbar = ref(false);
 const isLoggedIn = ref(false);
 let auth: any;
-console.log(router);
+
 onMounted(() => {
     auth = getAuth();
     onAuthStateChanged(auth, (user) => {
@@ -21,14 +21,12 @@ const handleSignout = async () => {
     await signOut(auth);
     router.push({ name: "home" });
 };
-const getCurrentRouteName = () => router.currentRoute.value.name;
 </script>
 
 <template>
     <nav v-if="loadNavbar">
-        {{ getCurrentRouteName() === "tickers" }}
         <div class="flex justify-end items-center align-middle mr-4 my-7">
-            <router-link :to="{ name: 'home' }" class="nav-link">Home</router-link>
+            <router-link :to="{ name: 'home' }" class="nav-link"> Home </router-link>
             <div v-if="!isLoggedIn">
                 <router-link :to="{ name: 'sign-in' }" class="nav-link"> Sign in </router-link>
                 <router-link :to="{ name: 'sign-up' }" class="sign-up-link"> Sign up </router-link>

@@ -30,7 +30,7 @@ const getCoinImage = (token: string) => {
                         / {{ coin.asset }}
                     </p>
                     <p class="text-lg" :class="[Number(coin.P) > 0 ? 'text-green-400' : 'text-red-600']">
-                        {{ Number(coin.c) }}
+                        {{ coin.c }}
                     </p>
                 </div>
 
